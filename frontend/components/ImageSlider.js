@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ImageSlider({ images: propImages }) {
     const [images, setImages] = useState(propImages || [
-        'http://localhost:5000/uploads/slider%20(1).png',
-        'http://localhost:5000/uploads/slider%20(2).png',
-        'http://localhost:5000/uploads/slider%20(3).png'
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://zizo10.com/api'}/../uploads/slider%20(1).png`, // Back out of /api to root if needed, or point to uploads
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://zizo10.com/api'}/../uploads/slider%20(2).png`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://zizo10.com/api'}/../uploads/slider%20(3).png`
     ]);
     const [currentIndex, setCurrentIndex] = useState(0);
 

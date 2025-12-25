@@ -10,7 +10,8 @@ const sequelize = new Sequelize(
     process.env.DB_PASSWORD || '',
     {
         host: process.env.DB_HOST || 'localhost',
-        dialect: 'mysql',
+        dialect: process.env.DB_DIALECT || 'mysql',
+        storage: process.env.DB_STORAGE || 'database.sqlite', // For SQLite
         logging: false,
         pool: {
             max: 5,

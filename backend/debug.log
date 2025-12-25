@@ -1,0 +1,552 @@
+
+[2025-12-24T14:23:07.562Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:23:07.566Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:24:19.865Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:24:19.868Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 106 ]
+
+[2025-12-24T14:24:33.985Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:24:33.989Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:26:02.775Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:26:02.779Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 107 ]
+
+[2025-12-24T14:37:36.687Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:37:36.691Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 107 ]
+
+[2025-12-24T14:37:53.312Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:37:53.314Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:37:56.416Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:37:56.417Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:38:26.885Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:38:26.887Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 108 ]
+
+[2025-12-24T14:38:31.986Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:38:31.988Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:38:34.426Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:38:34.427Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:41:41.187Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:41:41.190Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:42:06.864Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:42:06.866Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 109 ]
+
+[2025-12-24T14:42:15.872Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:42:15.874Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:42:19.127Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:42:19.129Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:45:53.996Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:45:53.997Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:48:04.867Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:48:04.869Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 110 ]
+
+[2025-12-24T14:48:10.490Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:48:10.491Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:48:14.608Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:48:14.610Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T14:49:53.509Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T14:49:53.511Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:20:49.564Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:20:49.570Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:22:41.762Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:22:41.764Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:22:43.882Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:22:43.884Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:24:24.056Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:24:24.061Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:26:52.251Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:26:52.256Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:27:02.888Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:27:02.890Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:31:23.433Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:31:23.435Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:32:03.486Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:32:03.487Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:33:33.760Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:33:33.762Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:47:30.367Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:47:30.369Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:47:46.173Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:47:46.176Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T15:48:11.869Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T15:48:11.871Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T16:13:25.266Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:13:25.269Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T16:13:28.120Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:13:28.122Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T16:13:48.502Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:13:48.505Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T16:21:16.679Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:21:16.680Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T16:22:15.465Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:22:15.467Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Found ID 103. Status: 'pending' | AssignedAgent: null | ReceivedByAgent: null | Type: add_money
+
+[2025-12-24T16:26:55.163Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:26:55.164Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:32:08.264Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:32:08.266Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:32:08.273Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:32:08.275Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:33:04.271Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:33:04.272Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:33:48.727Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:33:48.729Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:33:53.765Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:33:53.767Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:34:08.152Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:34:08.153Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:35:54.616Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:35:54.617Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:48:59.918Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:48:59.920Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:53:55.801Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:53:55.805Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:59:08.675Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:59:08.677Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T16:59:50.961Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T16:59:50.963Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 116 ]
+
+[2025-12-24T17:00:38.622Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T17:00:38.625Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T17:00:49.302Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T17:00:49.305Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T17:07:01.538Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T17:07:01.543Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T17:55:31.752Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T17:55:31.756Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T17:56:56.357Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T17:56:56.361Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T17:59:22.944Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T17:59:22.946Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:02:44.975Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:02:44.977Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:08:34.975Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:08:34.976Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:11:42.294Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:11:42.296Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:13:48.414Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:13:48.417Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:21:48.860Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:21:48.866Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:37:56.276Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:37:56.278Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:39:43.982Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:39:43.984Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:40:05.800Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:40:05.801Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:41:23.460Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:41:23.461Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:41:49.906Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:41:49.907Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:42:25.654Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:42:25.656Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:53:40.429Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:53:40.431Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:57:17.129Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:57:17.131Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:57:30.756Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:57:30.757Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:57:52.546Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:57:52.549Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T18:59:22.940Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T18:59:22.942Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:04:38.050Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:04:38.054Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 119 ]
+
+[2025-12-24T19:04:52.045Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:04:52.047Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:04:54.356Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:04:54.358Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:05:22.686Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:05:22.688Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:05:34.835Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:05:34.836Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:07:48.496Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:07:48.499Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:12:32.061Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:12:32.062Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:18:59.721Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:18:59.724Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:19:48.442Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:19:48.444Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:20:29.163Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:20:29.165Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:24:56.593Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:24:56.595Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:25:06.823Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:25:06.825Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:27:40.473Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:27:40.474Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:29:18.100Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:29:18.102Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:29:36.288Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:29:36.289Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 121 ]
+
+[2025-12-24T19:29:42.570Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:29:42.572Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:29:52.901Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:29:52.902Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:31:24.938Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:31:24.939Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:48:05.830Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:48:05.831Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:51:24.423Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:51:24.425Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:53:05.223Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:53:05.225Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:53:17.990Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:53:17.991Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:54:00.125Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:54:00.127Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T19:54:09.112Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:54:09.115Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 123 ]
+
+[2025-12-24T19:54:13.975Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T19:54:13.976Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:05:12.991Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:05:12.993Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:05:40.131Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:05:40.133Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:05:48.459Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:05:48.460Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 125 ]
+
+[2025-12-24T20:05:55.418Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:05:55.420Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:05:58.883Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:05:58.884Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:08:18.875Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:08:18.876Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 128 ]
+
+[2025-12-24T20:08:24.289Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:08:24.290Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:14:42.930Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:14:42.933Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:24:31.308Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:24:31.310Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-24T20:28:39.258Z] REQUESTING Transactions for AgentID: 3
+[2025-12-24T20:28:39.259Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T01:36:25.350Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T01:36:25.354Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 130 ]
+
+[2025-12-25T01:36:25.358Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T01:36:25.360Z] FOUND 1 transactions for AgentID: 3
+[ IDs: 130 ]
+
+[2025-12-25T01:36:57.092Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T01:36:57.094Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T01:37:29.363Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T01:37:29.365Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T01:54:50.202Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T01:54:50.204Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T01:54:59.667Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T01:54:59.668Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:07:06.272Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:07:06.276Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:10:01.970Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:10:01.972Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:11:26.256Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:11:26.258Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:13:52.462Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:13:52.465Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:19:21.990Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:19:21.992Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:24:14.938Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:24:14.940Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:28:01.463Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:28:01.466Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:28:06.973Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:28:06.975Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:33:37.873Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:33:37.875Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:41:29.683Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:41:29.685Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T02:59:55.607Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T02:59:55.612Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:29:08.560Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:29:08.562Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:29:11.890Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:29:11.892Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:34:41.345Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:34:41.348Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:41:05.182Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:41:05.184Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:41:09.044Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:41:09.048Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:47:09.219Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:47:09.224Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:49:01.532Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:49:01.534Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:49:06.733Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:49:06.735Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:50:54.469Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:50:54.470Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:53:39.480Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:53:39.481Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T03:59:48.342Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T03:59:48.345Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T04:01:54.398Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T04:01:54.400Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T04:05:49.182Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T04:05:49.185Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T04:05:49.197Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T04:05:49.199Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T04:06:30.909Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T04:06:30.911Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2025-12-25T04:11:27.165Z] REQUESTING Transactions for AgentID: 3
+[2025-12-25T04:11:27.167Z] FOUND 0 transactions for AgentID: 3
+[DEBUG 103] Transaction 103 NOT FOUND in DB.

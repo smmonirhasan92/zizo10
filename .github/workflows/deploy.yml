@@ -35,6 +35,8 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./frontend/out/
         server-dir: ./public_html/
+        protocol: sftp
+        port: 22
 
   deploy-backend:
     runs-on: ubuntu-latest
@@ -55,6 +57,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        protocol: sftp
+        port: 22
         local-dir: ./backend/
         server-dir: ./backend/
         exclude: |
@@ -71,6 +75,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        protocol: sftp
+        port: 22
         local-dir: ./
         server-dir: ./backend/tmp/
         include: restart.txt

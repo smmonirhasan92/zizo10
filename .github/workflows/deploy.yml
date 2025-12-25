@@ -35,7 +35,6 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./frontend/out/
         server-dir: ./public_html/
-        dangerously-force-upload: true
 
   deploy-backend:
     runs-on: ubuntu-latest

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import BottomNav from '../../components/BottomNav';
 import ImageSlider from '../../components/ImageSlider';
 import Loading from '../../components/Loading'; // Custom Skeleton
-import { Bell, Zap, Send, Smartphone, Plus, Gamepad2, Headset, Wallet, ArrowRight, User, History, CheckCircle, TrendingUp, DollarSign, ArrowDownLeft, ChevronUp, ChevronDown } from 'lucide-react';
+import { Bell, Zap, Send, Smartphone, Plus, Gamepad2, Headset, Wallet, ArrowRight, User, History, CheckCircle, TrendingUp, DollarSign, ArrowDownLeft, ChevronUp, ChevronDown, Share2 } from 'lucide-react';
 
 export default function DashboardPage() {
     const [user, setUser] = useState(null);
@@ -187,11 +187,11 @@ export default function DashboardPage() {
                             <span className="text-[10px] font-bold text-slate-400 group-hover:text-rose-400 transition-colors">Withdraw</span>
                         </Link>
 
-                        <Link href="/wallet/send" className="flex flex-col items-center gap-2 group">
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 flex items-center justify-center border border-indigo-500/20 shadow-lg shadow-indigo-500/5 group-hover:scale-105 transition-transform backdrop-blur-sm">
-                                <Send className="w-5 h-5 text-indigo-400 group-hover:text-indigo-300 -ml-0.5 mt-0.5" />
+                        <Link href="/invite" className="flex flex-col items-center gap-2 group">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center border border-purple-500/20 shadow-lg shadow-purple-500/5 group-hover:scale-105 transition-transform backdrop-blur-sm">
+                                <Share2 className="w-5 h-5 text-purple-400 group-hover:text-purple-300 -ml-0.5 mt-0.5" />
                             </div>
-                            <span className="text-[10px] font-bold text-slate-400 group-hover:text-indigo-400 transition-colors">Transfer</span>
+                            <span className="text-[10px] font-bold text-slate-400 group-hover:text-purple-400 transition-colors">Invite</span>
                         </Link>
 
                         <Link href="/history" className="flex flex-col items-center gap-2 group">

@@ -28,15 +28,15 @@ jobs:
         NEXT_PUBLIC_API_URL: '/api'
 
     - name: Deploy Frontend
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./frontend/out/
-        server-dir: ./public_html/
-        protocol: sftp
         port: 22
+        local_path: './frontend/out'
+        remote_path: '/public_html'
+
 
   deploy-backend:
     runs-on: ubuntu-latest
@@ -52,31 +52,26 @@ jobs:
         rm -rf node_modules .env .git
 
     - name: Deploy Backend Source
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        protocol: sftp
         port: 22
-        local-dir: ./backend/
-        server-dir: ./backend/
-        exclude: |
-          **/.git*
-          **/node_modules/**
-          .env
+        local_path: './backend'
+        remote_path: '/public_html/backend'
+
 
     - name: Trigger Restart
       run: echo "restart" > restart.txt
 
     - name: Upload Restart Trigger
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        protocol: sftp
         port: 22
-        local-dir: ./
-        server-dir: ./backend/tmp/
-        include: restart.txt
+        local_path: './restart.txt'
+        remote_path: '/public_html/backend/tmp'
+

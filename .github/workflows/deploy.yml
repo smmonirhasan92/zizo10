@@ -35,7 +35,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 22
         local_path: './frontend/out'
-        remote_path: '/public_html'
+        remote_path: '/home/zizocom/public_html'
 
 
   deploy-backend:
@@ -59,7 +59,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 22
         local_path: './backend'
-        remote_path: '/public_html/backend'
+        remote_path: '/home/zizocom/public_html/backend'
 
 
     - name: Trigger Restart
@@ -73,5 +73,5 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 22
         local_path: './restart.txt'
-        remote_path: '/public_html/backend/tmp'
+        remote_path: '/home/zizocom/public_html/backend/tmp'
 

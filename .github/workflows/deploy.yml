@@ -3,12 +3,14 @@ name: Production Deployment
 on:
   push:
     branches: [ master, main ]
+  workflow_dispatch:
 
 jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -18,15 +20,14 @@ jobs:
         cache-dependency-path: frontend/package-lock.json
 
     - name: Install Frontend Deps
-      run: cd frontend && npm ci
+      run: cd frontend && npm install
 
     - name: Build Static Admin/Frontend
       run: cd frontend && npm run build
       env:
-        # Update this if your API is on a subdomain or different path
         NEXT_PUBLIC_API_URL: '/api'
 
-    - name: Deploy Frontend to public_html
+    - name: Deploy Frontend
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
@@ -41,12 +42,12 @@ jobs:
     needs: deploy-frontend
     if: success()
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
     - name: Prepare Backend
       run: |
         cd backend
-        # Remove local dev files to prevent upload
         rm -rf node_modules .env .git
 
     - name: Deploy Backend Source
@@ -56,13 +57,13 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./backend/
-        server-dir: ./backend/   # Ensure your Node.js app points to this folder
+        server-dir: ./backend/
         exclude: |
           **/.git*
           **/node_modules/**
           .env
 
-    - name: Create Restart Trigger
+    - name: Trigger Restart
       run: echo "restart" > restart.txt
 
     - name: Upload Restart Trigger
@@ -74,4 +75,3 @@ jobs:
         local-dir: ./
         server-dir: ./backend/tmp/
         include: restart.txt
-

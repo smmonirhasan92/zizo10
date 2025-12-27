@@ -164,10 +164,13 @@ exports.completeTransaction = async (req, res) => {
         // Admin/Agent Updates
         if (bonusAmount) transaction.bonusAmount = parseFloat(bonusAmount);
 
-        // If an Agent ID is provided during completion (e.g., Admin selecting Agent for Add Money)
-        // OR if the logged-in user is an Agent completing it, ensure we track who did it.
-        if (receivedByAgentId) transaction.receivedByAgentId = receivedByAgentId;
-        else if (agentId) transaction.receivedByAgentId = agentId;
+        // If an Agent ID is provided (even if empty string/null to clear it), update it.
+        if (receivedByAgentId !== undefined) {
+            transaction.receivedByAgentId = receivedByAgentId ? receivedByAgentId : null;
+        } else if (agentId) {
+            // If not explicitly provided in body, but user is Agent, assign to self
+            transaction.receivedByAgentId = agentId;
+        }
 
         await transaction.save({ transaction: t });
 

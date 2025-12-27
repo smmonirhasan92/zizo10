@@ -81,7 +81,7 @@ export default function TransactionApproval() {
             fetchTransactions();
         } catch (err) {
             console.error(err);
-            alert('Failed to approve');
+            alert('Failed to approve: ' + (err.response?.data?.message || err.message));
         }
     };
 

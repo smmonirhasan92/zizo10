@@ -103,14 +103,6 @@ exports.submitTask = async (req, res) => {
             return res.status(403).json({ message: 'Free plan cannot perform tasks. Please upgrade.' });
         }
 
-        // Tier Logic - Fetching STRICTLY
-        const tierName = user.account_tier;
-        const tier = await AccountTier.findOne({ where: { name: tierName }, transaction: t });
-
-        // Safety Fallback
-        const effectiveTier = tier || { daily_limit: 0, reward_multiplier: 1.00, task_reward: 0 };
-
-
         // Global Settings
         const globalSettings = await GlobalSetting.findOne({ transaction: t });
         const baseReward = globalSettings ? parseFloat(globalSettings.task_base_reward) : 5.00;
@@ -122,6 +114,7 @@ exports.submitTask = async (req, res) => {
         const finalReward = parseFloat((baseReward * multiplier).toFixed(2));
 
         // STRICT LIMIT ENFORCEMENT
+        // Use the Tier's limit. If the user is on a plan, they get THAT limit.
         const dailyLimit = parseInt(effectiveTier.daily_limit) || 0;
 
         const settings = {

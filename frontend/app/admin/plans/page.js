@@ -14,7 +14,8 @@ export default function AdminPlansPage() {
         daily_limit: 5,
         task_reward: 2.00,
         unlock_price: 0,
-        validity_days: 365
+        validity_days: 365,
+        reward_multiplier: 1.00 // Added Default
     });
 
     useEffect(() => {
@@ -35,10 +36,20 @@ export default function AdminPlansPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/admin/tiers', formData);
+            // Ensure types
+            const payload = {
+                ...formData,
+                daily_limit: parseInt(formData.daily_limit),
+                task_reward: parseFloat(formData.task_reward),
+                unlock_price: parseFloat(formData.unlock_price),
+                validity_days: parseInt(formData.validity_days),
+                reward_multiplier: parseFloat(formData.reward_multiplier)
+            };
+
+            await api.post('/admin/tiers', payload);
             fetchPlans();
             setShowForm(false);
-            setFormData({ id: null, name: '', daily_limit: 5, task_reward: 2, unlock_price: 0, validity_days: 365 });
+            setFormData({ id: null, name: '', daily_limit: 5, task_reward: 2, unlock_price: 0, validity_days: 365, reward_multiplier: 1.00 });
         } catch (err) {
             console.error(err);
             alert('Failed to save plan');
@@ -74,7 +85,7 @@ export default function AdminPlansPage() {
                         </Link>
                         <button
                             onClick={() => {
-                                setFormData({ id: null, name: '', daily_limit: 5, task_reward: 2, unlock_price: 0, validity_days: 365 });
+                                setFormData({ id: null, name: '', daily_limit: 5, task_reward: 2, unlock_price: 0, validity_days: 365, reward_multiplier: 1.00 });
                                 setShowForm(true);
                             }}
                             className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition"
@@ -97,13 +108,13 @@ export default function AdminPlansPage() {
                     >
                         {/* Color Strip */}
                         <div className={`absolute left-0 top-0 bottom-0 w-1 ${plan.name === 'VIP' ? 'bg-amber-400' :
-                                plan.name === 'Premium' ? 'bg-purple-500' : 'bg-slate-300'
+                            plan.name === 'Premium' ? 'bg-purple-500' : 'bg-slate-300'
                             }`}></div>
 
                         <div className="flex justify-between items-start">
                             <div className="flex items-start gap-4">
                                 <div className={`p-3 rounded-xl bg-slate-50 ${plan.name === 'VIP' ? 'text-amber-500' :
-                                        plan.name === 'Premium' ? 'text-purple-600' : 'text-slate-500'
+                                    plan.name === 'Premium' ? 'text-purple-600' : 'text-slate-500'
                                     }`}>
                                     <Crown className="w-6 h-6" />
                                 </div>
@@ -119,9 +130,14 @@ export default function AdminPlansPage() {
                                         <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium">
                                             {plan.validity_days} Days
                                         </span>
+                                        {plan.reward_multiplier > 1 && (
+                                            <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-md font-medium">
+                                                {plan.reward_multiplier}x Reward
+                                            </span>
+                                        )}
                                     </div>
                                     <p className="text-xs text-slate-400 mt-2">
-                                        Max Earn: ৳{(plan.daily_limit * plan.task_reward * plan.validity_days).toFixed(0)}
+                                        Max Earn: ৳{(plan.daily_limit * (plan.task_reward * (plan.reward_multiplier || 1)) * plan.validity_days).toFixed(0)}
                                     </p>
                                 </div>
                             </div>
@@ -198,14 +214,14 @@ export default function AdminPlansPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-xs font-bold text-slate-500 uppercase">Price (৳)</label>
+                                    <label className="text-xs font-bold text-slate-500 uppercase">Multiplier (x)</label>
                                     <input
                                         type="number"
                                         step="0.01"
                                         required
                                         className="w-full mt-2 p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-purple-500 font-bold"
-                                        value={formData.unlock_price}
-                                        onChange={e => setFormData({ ...formData, unlock_price: e.target.value })}
+                                        value={formData.reward_multiplier}
+                                        onChange={e => setFormData({ ...formData, reward_multiplier: e.target.value })}
                                     />
                                 </div>
                                 <div>
@@ -218,6 +234,17 @@ export default function AdminPlansPage() {
                                         onChange={e => setFormData({ ...formData, validity_days: e.target.value })}
                                     />
                                 </div>
+                            </div>
+                            <div>
+                                <label className="text-xs font-bold text-slate-500 uppercase">Price (৳)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    required
+                                    className="w-full mt-2 p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-purple-500 font-bold"
+                                    value={formData.unlock_price}
+                                    onChange={e => setFormData({ ...formData, unlock_price: e.target.value })}
+                                />
                             </div>
                         </div>
                         <div className="p-6 bg-slate-50 flex gap-3">

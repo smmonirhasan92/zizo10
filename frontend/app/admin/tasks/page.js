@@ -142,7 +142,7 @@ export default function AdminTasksPage() {
                                     type="number"
                                     className="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500"
                                     value={formData.priority}
-                                    onChange={e => setFormData({ ...formData, priority: parseInt(e.target.value) })}
+                                    onChange={e => setFormData({ ...formData, priority: parseInt(e.target.value) || 0 })}
                                 />
                             </div>
                         </div>

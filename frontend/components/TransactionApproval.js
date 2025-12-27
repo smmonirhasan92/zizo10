@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ApprovalModal from './admin/ApprovalModal';
 import TransactionCard from './admin/TransactionCard';
-import api from '../services/api'; // Use api service instead of manual axios
+import api from '../services/api';
 import Link from 'next/link';
+import { useNotification } from '../context/NotificationContext';
 
 export default function TransactionApproval() {
+    const { showSuccess, showError } = useNotification();
     const [transactions, setTransactions] = useState([]);
     const [agents, setAgents] = useState([]);
     const [selectedAgent, setSelectedAgent] = useState({});
@@ -29,7 +31,7 @@ export default function TransactionApproval() {
             setTransactions(res.data);
         } catch (err) {
             console.error(err);
-            alert('Admin Panel Error: ' + (err.response?.data?.message || err.message));
+            showError('Admin Panel Error: ' + (err.response?.data?.message || err.message));
         } finally {
             setLoading(false);
         }
@@ -48,15 +50,15 @@ export default function TransactionApproval() {
 
     const handleAssign = async (transactionId) => {
         const agentId = selectedAgent[transactionId];
-        if (!agentId) return alert('Please select an agent');
+        if (!agentId) return showError('Please select an agent');
 
         try {
             await api.post('/transactions/assign', { transactionId, agentId });
-            alert('Assigned to Agent!');
+            showSuccess('Assigned to Agent!');
             fetchTransactions();
         } catch (err) {
             console.error(err);
-            alert('Failed to assign');
+            showError('Failed to assign');
         }
     };
 
@@ -76,12 +78,12 @@ export default function TransactionApproval() {
                 bonusAmount,
                 receivedByAgentId: receivedAgent
             });
-            alert('Transaction Approved!');
+            showSuccess('Transaction Approved!');
             setApprovalModal({ show: false, transactionId: null, type: null });
             fetchTransactions();
         } catch (err) {
             console.error(err);
-            alert('Failed to approve: ' + (err.response?.data?.message || err.message));
+            showError('Failed to approve: ' + (err.response?.data?.message || err.message));
         }
     };
 
@@ -97,11 +99,11 @@ export default function TransactionApproval() {
                 status: 'rejected',
                 comment: 'Admin Rejected'
             });
-            alert('Transaction Rejected!');
+            showSuccess('Transaction Rejected!');
             fetchTransactions();
         } catch (err) {
             console.error(err);
-            alert('Failed to reject');
+            showError('Failed to reject');
         }
     };
 

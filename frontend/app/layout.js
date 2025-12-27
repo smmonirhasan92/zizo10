@@ -44,15 +44,19 @@ export const viewport = {
     themeColor: '#0f172a',
 }
 
+import { NotificationProvider } from '../context/NotificationContext';
+
 export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning={true}>
             <body className={`${inter.className} bg-gray-50 min-h-screen text-gray-900`} suppressHydrationWarning={true}>
-                <div className="min-h-screen flex flex-col relative w-full mx-auto bg-white min-h-[100dvh]">
-                    <main className="flex-1 overflow-y-auto no-scrollbar pb-20">
-                        {children}
-                    </main>
-                </div>
+                <NotificationProvider>
+                    <div className="min-h-screen flex flex-col relative w-full mx-auto bg-white min-h-[100dvh]">
+                        <main className="flex-1 overflow-y-auto no-scrollbar pb-20">
+                            {children}
+                        </main>
+                    </div>
+                </NotificationProvider>
             </body>
         </html>
     )

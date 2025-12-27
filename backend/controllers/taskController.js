@@ -88,8 +88,14 @@ exports.submitTask = async (req, res) => {
         const userId = req.user.user.id;
         const user = await User.findByPk(userId, { transaction: t });
 
-        // Tier Logic
-        await AccountTier.findOne({ where: { name: 'Starter' }, transaction: t });
+        // Tier Logic - STRICT
+        // Default to 'Starter' (Free) if no tier, but ensure we fetch the actual tier object
+        const tierName = user.account_tier || 'Starter';
+        const tier = await AccountTier.findOne({ where: { name: tierName }, transaction: t });
+
+        // Safety Fallback: If for some reason tier doesn't exist in DB (integrity error), use a safe default
+        // But for "Strict Plan-Based Logic" we should rely on the DB.
+        const effectiveTier = tier || { daily_limit: 0, reward_multiplier: 1.00, task_reward: 0 };
 
         // BLOCK FREE USERS (Starter)
         if (!user.account_tier || user.account_tier === 'Starter' || user.account_tier === 'Free') {
@@ -97,17 +103,26 @@ exports.submitTask = async (req, res) => {
             return res.status(403).json({ message: 'Free plan cannot perform tasks. Please upgrade.' });
         }
 
+        // Tier Logic - Fetching STRICTLY
+        const tierName = user.account_tier;
+        const tier = await AccountTier.findOne({ where: { name: tierName }, transaction: t });
+
+        // Safety Fallback
+        const effectiveTier = tier || { daily_limit: 0, reward_multiplier: 1.00, task_reward: 0 };
+
+
         // Global Settings
         const globalSettings = await GlobalSetting.findOne({ transaction: t });
         const baseReward = globalSettings ? parseFloat(globalSettings.task_base_reward) : 5.00;
-        const globalDailyLimit = globalSettings ? globalSettings.daily_task_limit : 10;
 
         // Calculate Dynamic Reward
-        const multiplier = tier ? parseFloat(tier.reward_multiplier) : 1.00;
+        // Priority: Plan-specific reward (if set > 0) -> Global Base * Plan Multiplier
+        // We use: Base * Multiplier
+        const multiplier = parseFloat(effectiveTier.reward_multiplier) || 1.00;
         const finalReward = parseFloat((baseReward * multiplier).toFixed(2));
 
-        // Limit Logic
-        const dailyLimit = (tier && tier.daily_limit > 0) ? tier.daily_limit : globalDailyLimit;
+        // STRICT LIMIT ENFORCEMENT
+        const dailyLimit = parseInt(effectiveTier.daily_limit) || 0;
 
         const settings = {
             task_base_reward: finalReward,

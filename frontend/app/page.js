@@ -128,7 +128,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Telegram Floating Button */}
-                <a href="https://t.me/YourTelegramHandle" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-[#0088cc] text-white p-3.5 rounded-full shadow-[0_10px_20px_-5px_rgba(0,136,204,0.4)] hover:scale-110 active:scale-95 transition-transform z-50">
+                <a href="https://t.me/+ReboihN0RXQxNTc1" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-[#0088cc] text-white p-3.5 rounded-full shadow-[0_10px_20px_-5px_rgba(0,136,204,0.4)] hover:scale-110 active:scale-95 transition-transform z-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
                 </a>
             </div>

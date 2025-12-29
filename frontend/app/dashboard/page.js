@@ -263,7 +263,7 @@ export default function DashboardPage() {
             <BottomNav />
 
             {/* Floating Telegram Button */}
-            <a href="https://t.me/YourTelegramLink" target="_blank" className="fixed bottom-24 right-5 w-12 h-12 bg-[#0088cc] rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/30 z-[9999] animate-bounce-slow hover:scale-110 transition-transform">
+            <a href="https://t.me/+ReboihN0RXQxNTc1" target="_blank" className="fixed bottom-24 right-5 w-12 h-12 bg-[#0088cc] rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/30 z-[9999] animate-bounce-slow hover:scale-110 transition-transform">
                 <Send className="w-5 h-5 text-white" />
             </a>
 

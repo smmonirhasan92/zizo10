@@ -186,7 +186,7 @@ function RegisterForm() { // Wrapped in component for Suspense
                 </div>
 
                 {/* Telegram Support Floating Button */}
-                <a href="https://t.me/YourTelegramHandle" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-50 animate-bounce">
+                <a href="https://t.me/+ReboihN0RXQxNTc1" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-50 animate-bounce">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2L2 15l8.5 2M21.5 2L10.5 22l4-8.5" /></svg>
                 </a>
             </div>

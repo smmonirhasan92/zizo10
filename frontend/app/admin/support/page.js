@@ -93,8 +93,8 @@ export default function AdminSupportPage() {
                             key={f}
                             onClick={() => setFilter(f)}
                             className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition ${filter === f
-                                    ? 'bg-slate-800 text-white shadow-lg'
-                                    : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
+                                ? 'bg-slate-800 text-white shadow-lg'
+                                : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
                                 }`}
                         >
                             {f}
@@ -178,8 +178,8 @@ export default function AdminSupportPage() {
 
                         <form onSubmit={handleReply} className="p-6">
                             <div className="bg-indigo-50 p-4 rounded-xl mb-6">
-                                <p className="text-xs font-bold text-indigo-400 uppercase mb-1">User's Message</p>
-                                <p className="text-sm text-slate-700 line-clamp-3 italic">"{replyingTo.message}"</p>
+                                <p className="text-xs font-bold text-indigo-400 uppercase mb-1">User&apos;s Message</p>
+                                <p className="text-sm text-slate-700 line-clamp-3 italic">&quot;{replyingTo.message}&quot;</p>
                             </div>
 
                             <label className="block text-sm font-bold text-slate-700 mb-2">Your Reply</label>

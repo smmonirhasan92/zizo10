@@ -6,12 +6,6 @@ export default function GameStatsModal({ userId, username, isOpen, onClose }) {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (isOpen && userId) {
-            fetchStats();
-        }
-    }, [isOpen, userId]);
-
     const fetchStats = async () => {
         setLoading(true);
         try {
@@ -23,6 +17,12 @@ export default function GameStatsModal({ userId, username, isOpen, onClose }) {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (isOpen && userId) {
+            fetchStats();
+        }
+    }, [isOpen, userId]);
 
     if (!isOpen) return null;
 

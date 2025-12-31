@@ -23,10 +23,10 @@ function RegisterForm() { // Wrapped in component for Suspense
     });
 
     useEffect(() => {
-        if (refCodeFromUrl) {
+        if (refCodeFromUrl && formData.referralCode !== refCodeFromUrl) {
             setFormData(prev => ({ ...prev, referralCode: refCodeFromUrl }));
         }
-    }, [refCodeFromUrl]);
+    }, [refCodeFromUrl, formData.referralCode]);
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);

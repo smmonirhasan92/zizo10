@@ -11,10 +11,6 @@ export default function AgentTasksPage() {
     const [selectedTaskId, setSelectedTaskId] = useState(null);
     const [note, setNote] = useState('');
 
-    useEffect(() => {
-        fetchTasks();
-    }, []);
-
     const fetchTasks = async () => {
         try {
             const res = await api.get('/transactions/assigned');
@@ -25,6 +21,10 @@ export default function AgentTasksPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
 
     const openCompleteModal = (taskId) => {
         setSelectedTaskId(taskId);

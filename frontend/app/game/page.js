@@ -23,13 +23,6 @@ export default function GamePage() {
     const [showToast, setShowToast] = useState(false);
     const [isMaintenance, setIsMaintenance] = useState(false);
 
-    useEffect(() => {
-        fetchGameInfo();
-        fetchWallet();
-        const interval = setInterval(fetchWallet, 5000);
-        return () => clearInterval(interval);
-    }, []);
-
     const fetchGameInfo = async () => {
         try { const res = await api.get('/game'); if (res.data) { setMinBet(res.data.minBet || 10); setMaxBet(res.data.maxBet || 1000); } } catch (err) { console.error(err); }
     };
@@ -41,6 +34,13 @@ export default function GamePage() {
             setMainBalance(res.data.wallet_balance || 0);
         } catch (err) { console.error(err); }
     };
+
+    useEffect(() => {
+        fetchGameInfo();
+        fetchWallet();
+        const interval = setInterval(fetchWallet, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     const handlePlay = async () => {
         if (gameState === 'flipping') return;

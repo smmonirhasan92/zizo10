@@ -12,14 +12,6 @@ export default function AgentHistoryPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTab, setActiveTab] = useState('all'); // 'all', 'completed', 'pending', 'commission'
 
-    useEffect(() => {
-        fetchHistory();
-    }, []);
-
-    useEffect(() => {
-        filterData();
-    }, [transactions, searchQuery, activeTab]);
-
     const fetchHistory = async () => {
         try {
             const res = await api.get('/transaction/history');
@@ -52,34 +44,17 @@ export default function AgentHistoryPage() {
         setFilteredTransactions(data);
     };
 
-    const StatusBadge = ({ status }) => {
-        const colors = {
-            completed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-            rejected: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-            pending: 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-        };
-        return (
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${colors[status] || 'bg-slate-700 text-slate-400'}`}>
-                {status}
-            </span>
-        );
-    };
+    useEffect(() => {
+        fetchHistory();
+    }, []);
 
-    const TabButton = ({ id, label }) => (
-        <button
-            onClick={() => setActiveTab(id)}
-            className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition relative z-10 ${activeTab === id ? 'text-white' : 'text-slate-400 hover:text-slate-200'
-                }`}
-        >
-            {label}
-            {activeTab === id && (
-                <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-white/10 rounded-xl -z-10"
-                />
-            )}
-        </button>
-    );
+    useEffect(() => {
+        filterData();
+    }, [transactions, searchQuery, activeTab]);
+
+
+
+
 
     return (
         <div className="min-h-screen bg-[#1A1F2B] font-sans pb-20 text-slate-200">
@@ -106,10 +81,10 @@ export default function AgentHistoryPage() {
 
                 {/* Styled Tabs */}
                 <div className="flex bg-[#111827] p-1.5 rounded-2xl border border-white/5">
-                    <TabButton id="all" label="All" />
-                    <TabButton id="completed" label="Done" />
-                    <TabButton id="pending" label="Pending" />
-                    <TabButton id="commission" label="Earned" />
+                    <TabButton id="all" label="All" activeTab={activeTab} onClick={setActiveTab} />
+                    <TabButton id="completed" label="Done" activeTab={activeTab} onClick={setActiveTab} />
+                    <TabButton id="pending" label="Pending" activeTab={activeTab} onClick={setActiveTab} />
+                    <TabButton id="commission" label="Earned" activeTab={activeTab} onClick={setActiveTab} />
                 </div>
             </div>
 
@@ -167,10 +142,10 @@ export default function AgentHistoryPage() {
                                     </div>
                                     <div className="text-right">
                                         <p className={`font-black text-lg mb-1 ${trx.type === 'commission' || trx.type === 'admin_credit'
-                                                ? 'text-emerald-400'
-                                                : (trx.type === 'admin_debit' || (trx.type === 'add_money' && trx.status === 'completed'))
-                                                    ? 'text-rose-400'
-                                                    : 'text-white'
+                                            ? 'text-emerald-400'
+                                            : (trx.type === 'admin_debit' || (trx.type === 'add_money' && trx.status === 'completed'))
+                                                ? 'text-rose-400'
+                                                : 'text-white'
                                             }`}>
                                             {trx.type === 'commission' || trx.type === 'admin_credit' || (trx.type === 'send_money') ? '+' : (trx.type === 'admin_debit' ? '-' : '')}
                                             ৳{Math.abs(trx.amount)}
@@ -203,3 +178,32 @@ export default function AgentHistoryPage() {
         </div>
     );
 }
+
+const StatusBadge = ({ status }) => {
+    const colors = {
+        completed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+        rejected: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+        pending: 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+    };
+    return (
+        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${colors[status] || 'bg-slate-700 text-slate-400'}`}>
+            {status}
+        </span>
+    );
+};
+
+const TabButton = ({ id, label, activeTab, onClick }) => (
+    <button
+        onClick={() => onClick(id)}
+        className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition relative z-10 ${activeTab === id ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+            }`}
+    >
+        {label}
+        {activeTab === id && (
+            <motion.div
+                layoutId="activeTab"
+                className="absolute inset-0 bg-white/10 rounded-xl -z-10"
+            />
+        )}
+    </button>
+);

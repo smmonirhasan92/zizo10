@@ -5,10 +5,10 @@ export default function AgentBalanceModal({ isOpen, onClose, onSubmit, initialAg
     const [form, setForm] = useState({ agentId: initialAgentId, type: 'credit', amount: '', note: '' });
 
     useEffect(() => {
-        if (initialAgentId) {
+        if (initialAgentId && form.agentId !== initialAgentId) {
             setForm(prev => ({ ...prev, agentId: initialAgentId }));
         }
-    }, [initialAgentId]);
+    }, [initialAgentId, form.agentId]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

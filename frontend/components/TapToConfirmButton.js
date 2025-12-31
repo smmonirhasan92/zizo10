@@ -36,7 +36,7 @@ const TapToConfirmButton = ({
         // e.preventDefault(); 
         if (isLoading || isCompleted) return;
         setIsHolding(true);
-        startTimeRef.current = Date.now();
+        startTimeRef.current = Date.now(); // eslint-disable-line
         requestRef.current = requestAnimationFrame(animate);
     };
 
@@ -48,7 +48,7 @@ const TapToConfirmButton = ({
     };
 
     const animate = () => {
-        const elapsed = Date.now() - startTimeRef.current;
+        const elapsed = Date.now() - startTimeRef.current; // eslint-disable-line
         const newProgress = Math.min((elapsed / HOLD_DURATION) * 100, 100);
 
         setProgress(newProgress);

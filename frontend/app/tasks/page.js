@@ -13,10 +13,6 @@ export default function TaskPage() {
     const [error, setError] = useState('');
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-    useEffect(() => {
-        fetchStatus();
-    }, []);
-
     const fetchStatus = async () => {
         try {
             const res = await api.get('/task/status');
@@ -28,6 +24,10 @@ export default function TaskPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchStatus();
+    }, []);
 
     if (loading) return <div className="text-white text-center p-10">Loading Task Center...</div>;
     if (error) return <div className="text-red-500 text-center p-10">{error}</div>;
@@ -64,7 +64,7 @@ export default function TaskPage() {
                     </h1>
                 </div>
                 <div className="text-right">
-                    <p className="text-sm text-gray-400">Today's Progress</p>
+                    <p className="text-sm text-gray-400">Today&apos;s Progress</p>
                     <p className="text-xl font-bold text-green-400 mb-1">
                         {tasksCompleted} / {dailyLimit}
                     </p>

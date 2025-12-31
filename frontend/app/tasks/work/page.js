@@ -23,10 +23,6 @@ function WorkContent() {
     const [loading, setLoading] = useState(false);
     const [adData, setAdData] = useState(null);
 
-    useEffect(() => {
-        if (adId) fetchAdData();
-    }, [adId]);
-
     const fetchAdData = async () => {
         try {
             const res = await api.get('/task/status');
@@ -41,6 +37,10 @@ function WorkContent() {
             console.error(err);
         }
     };
+
+    useEffect(() => {
+        if (adId) fetchAdData();
+    }, [adId]);
 
     useEffect(() => {
         let interval = null;

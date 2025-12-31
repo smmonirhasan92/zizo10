@@ -61,7 +61,7 @@ export default function AdminDashboard() {
                     <div className="flex overflow-x-auto pb-4 gap-3 md:grid md:grid-cols-4 md:pb-0 snap-x snap-mandatory hide-scrollbar">
                         {/* 1. Today's Deposit */}
                         <div className="min-w-[85%] md:min-w-0 bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md snap-center">
-                            <p className="text-slate-400 text-[10px] md:text-xs font-bold mb-1 uppercase tracking-wider">Today's Deposit</p>
+                            <p className="text-slate-400 text-[10px] md:text-xs font-bold mb-1 uppercase tracking-wider">Today&apos;s Deposit</p>
                             <h3 className="text-2xl font-black text-emerald-400">
                                 {loading ? '...' : `৳${Number(stats.todayDeposits).toLocaleString()}`}
                             </h3>
@@ -77,7 +77,7 @@ export default function AdminDashboard() {
 
                         {/* 3. Today's Withdraw */}
                         <div className="min-w-[85%] md:min-w-0 bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md snap-center">
-                            <p className="text-slate-400 text-[10px] md:text-xs font-bold mb-1 uppercase tracking-wider">Today's Withdraw</p>
+                            <p className="text-slate-400 text-[10px] md:text-xs font-bold mb-1 uppercase tracking-wider">Today&apos;s Withdraw</p>
                             <h3 className="text-2xl font-black text-rose-400">
                                 {loading ? '...' : `৳${Number(stats.todayWithdraws).toLocaleString()}`}
                             </h3>

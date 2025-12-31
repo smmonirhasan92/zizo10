@@ -18,10 +18,6 @@ export default function AdminPlansPage() {
         reward_multiplier: 1.00 // Added Default
     });
 
-    useEffect(() => {
-        fetchPlans();
-    }, []);
-
     const fetchPlans = async () => {
         try {
             const res = await api.get('/admin/tiers');
@@ -32,6 +28,10 @@ export default function AdminPlansPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchPlans();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

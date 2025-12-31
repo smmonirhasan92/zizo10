@@ -22,10 +22,16 @@ exports.getTaskStatus = async (req, res) => {
         const baseReward = globalSettings ? parseFloat(globalSettings.task_base_reward) : 5.00;
 
         // Calculate Dynamic Reward
-        // Priority: Plan-specific reward (if set > 0) -> Global Base * Plan Multiplier
-        // We Use: Global Base * Plan Multiplier
+        // Priority: Plan-specific fixed reward (if > 0) -> Global Base * Plan Multiplier
+        let finalReward;
+        const tierFixedReward = parseFloat(effectiveTier.task_reward || 0);
         const multiplier = parseFloat(effectiveTier.reward_multiplier) || 1.00;
-        const finalReward = (baseReward * multiplier).toFixed(2);
+
+        if (tierFixedReward > 0) {
+            finalReward = tierFixedReward.toFixed(2);
+        } else {
+            finalReward = (baseReward * multiplier).toFixed(2);
+        }
 
         // STRICT LIMIT ENFORCEMENT - PLAN BASED ONLY
         const dailyLimit = parseInt(effectiveTier.daily_limit) || 0;
@@ -93,10 +99,16 @@ exports.submitTask = async (req, res) => {
         const baseReward = globalSettings ? parseFloat(globalSettings.task_base_reward) : 5.00;
 
         // Calculate Dynamic Reward
-        // Priority: Plan-specific reward (if set > 0) -> Global Base * Plan Multiplier
-        // We use: Base * Multiplier
+        // Priority: Plan-specific fixed reward (if > 0) -> Global Base * Plan Multiplier
+        let finalReward;
+        const tierFixedReward = parseFloat(effectiveTier.task_reward || 0);
         const multiplier = parseFloat(effectiveTier.reward_multiplier) || 1.00;
-        const finalReward = parseFloat((baseReward * multiplier).toFixed(2));
+
+        if (tierFixedReward > 0) {
+            finalReward = tierFixedReward.toFixed(2);
+        } else {
+            finalReward = (baseReward * multiplier).toFixed(2);
+        }
 
         // STRICT LIMIT ENFORCEMENT - Plan Based
         const dailyLimit = parseInt(effectiveTier.daily_limit) || 0;

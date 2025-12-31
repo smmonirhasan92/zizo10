@@ -143,7 +143,7 @@ exports.submitTask = async (req, res) => {
 
         // Update Income Wallet
         // Ensure income_balance is treated as number
-        user.income_balance = parseFloat(user.income_balance) + settings.task_base_reward;
+        user.income_balance = parseFloat(user.income_balance) + parseFloat(settings.task_base_reward);
 
         await user.save({ transaction: t });
 

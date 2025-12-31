@@ -23,16 +23,11 @@ exports.getTaskStatus = async (req, res) => {
 
         // Calculate Dynamic Reward
         // Priority: Plan-specific reward (if set > 0) -> Global Base * Plan Multiplier
-        // The implementation plan suggests using the Multiplier logic.
-        // If effectiveTier.task_reward is explicit (e.g. 50), we might want to use that?
-        // Let's stick to the multiplier logic as requested in the plan updates.
-        // effectiveTier.task_reward is often the display value. 
-        // Let's use: Base * Multiplier
+        // We Use: Global Base * Plan Multiplier
         const multiplier = parseFloat(effectiveTier.reward_multiplier) || 1.00;
         const finalReward = (baseReward * multiplier).toFixed(2);
 
-        // STRICT LIMIT ENFORCEMENT
-        // Use the Tier's limit. If the user is on a plan, they get THAT limit.
+        // STRICT LIMIT ENFORCEMENT - PLAN BASED ONLY
         const dailyLimit = parseInt(effectiveTier.daily_limit) || 0;
 
         const settings = {
@@ -49,21 +44,14 @@ exports.getTaskStatus = async (req, res) => {
         }
 
         // Fetch Active Task Ads - STRICT LIMIT
-        // The limit MUST be the user's daily limit.
-        // If they have completed 2, and limit is 5, we still show them the pool?
-        // Usually, we show them `dailyLimit` number of tasks.
-        // Or do we show `dailyLimit - completed`? 
-        // User request: "User sees ONLY the specific number of tasks assigned to that plan."
-        // If Plan = 5 tasks. We query `limit: 5`.
         const taskAds = await TaskAd.findAll({
             where: { status: 'active' },
-            limit: settings.daily_task_limit, // STRICT LIMIT HERE
+            limit: settings.daily_task_limit,
             order: [['priority', 'DESC'], ['createdAt', 'DESC']]
         });
 
-        // Valid Tiers Check
-        // If daily_limit is 0, they can't work.
-        const canWork = settings.daily_task_limit > 0;
+        const canWork = settings.daily_task_limit > 0 && user.tasks_completed_today < settings.daily_task_limit;
+        const tasksRemaining = Math.max(0, settings.daily_task_limit - user.tasks_completed_today);
 
         res.json({
             tasksCompleted: user.tasks_completed_today,
@@ -73,7 +61,8 @@ exports.getTaskStatus = async (req, res) => {
             tierName: tierName,
             multiplier: multiplier,
             canWork: canWork,
-            message: canWork ? 'Keep working!' : 'Please upgrade your plan to unlock tasks.'
+            tasksRemaining: tasksRemaining,
+            message: canWork ? 'Keep working!' : (settings.daily_task_limit === 0 ? 'Please upgrade your plan to unlock tasks.' : 'Daily limit reached.')
         });
 
     } catch (err) {
@@ -113,8 +102,7 @@ exports.submitTask = async (req, res) => {
         const multiplier = parseFloat(effectiveTier.reward_multiplier) || 1.00;
         const finalReward = parseFloat((baseReward * multiplier).toFixed(2));
 
-        // STRICT LIMIT ENFORCEMENT
-        // Use the Tier's limit. If the user is on a plan, they get THAT limit.
+        // STRICT LIMIT ENFORCEMENT - Plan Based
         const dailyLimit = parseInt(effectiveTier.daily_limit) || 0;
 
         const settings = {
@@ -136,9 +124,10 @@ exports.submitTask = async (req, res) => {
         }
 
         // Limit Check
+        // Allow strictly less than limit (0 to limit-1)
         if (user.tasks_completed_today >= settings.daily_task_limit) {
             await t.rollback();
-            return res.status(400).json({ message: 'Daily task limit reached' });
+            return res.status(400).json({ message: 'Daily task limit reached for your plan' });
         }
 
         // Update User

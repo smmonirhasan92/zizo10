@@ -82,7 +82,7 @@ exports.updateGlobalSettings = async (req, res) => {
             if (silver_requirement !== undefined) settings.silver_requirement = silver_requirement;
             if (gold_requirement !== undefined) settings.gold_requirement = gold_requirement;
             if (task_base_reward !== undefined) settings.task_base_reward = task_base_reward;
-            if (daily_task_limit !== undefined) settings.daily_task_limit = daily_task_limit;
+            // daily_task_limit REMOVED - Controlled by Plans
             if (cash_out_commission_percent !== undefined) settings.cash_out_commission_percent = cash_out_commission_percent;
             await settings.save();
         }

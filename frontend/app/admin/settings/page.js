@@ -7,7 +7,6 @@ import { Save, Settings, DollarSign, Activity, ArrowLeft } from 'lucide-react';
 export default function GlobalSettingsPage() {
     const [settings, setSettings] = useState({
         task_base_reward: '',
-        daily_task_limit: '',
         min_withdraw_amount: '',
         referral_bonus_amount: '',
         referral_reward_currency: 'income',

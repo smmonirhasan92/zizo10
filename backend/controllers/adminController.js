@@ -393,59 +393,9 @@ exports.deleteTaskAd = async (req, res) => {
 };
 
 // --- GLOBAL SYSTEM SETTINGS ---
-
-exports.getGlobalSettings = async (req, res) => {
-    try {
-        let settings = await GlobalSetting.findOne();
-        if (!settings) {
-            settings = await GlobalSetting.create({
-                task_base_reward: 5.00,
-                daily_task_limit: 10,
-                min_withdraw_amount: 500,
-                referral_bonus_percent: 5.00
-            });
-        }
-        res.json(settings);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server Error' });
-    }
-};
-
-exports.updateGlobalSettings = async (req, res) => {
-    try {
-        const {
-            task_base_reward,
-            daily_task_limit,
-            min_withdraw_amount,
-            referral_bonus_percent,
-            referral_bonus_amount,
-            silver_requirement,
-            gold_requirement,
-            referral_reward_currency
-        } = req.body;
-
-        let settings = await GlobalSetting.findOne();
-        if (!settings) {
-            settings = await GlobalSetting.create({});
-        }
-
-        settings.task_base_reward = task_base_reward;
-        settings.daily_task_limit = daily_task_limit;
-        settings.min_withdraw_amount = min_withdraw_amount;
-        settings.referral_bonus_percent = referral_bonus_percent;
-        settings.referral_bonus_amount = referral_bonus_amount;
-        settings.silver_requirement = silver_requirement;
-        settings.gold_requirement = gold_requirement;
-        settings.referral_reward_currency = referral_reward_currency;
-
-        await settings.save();
-        res.json({ message: 'Global Settings Updated', settings });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server Error' });
-    }
-};
+// (Moved to settingsController.js - Kept here for reference only if needed, but safe to delete to strictly enforce separation)
+// exports.getGlobalSettings = ... (Removed)
+// exports.updateGlobalSettings = ... (Removed)
 
 // --- ACCOUNT TIER / PLAN MANAGEMENT ---
 

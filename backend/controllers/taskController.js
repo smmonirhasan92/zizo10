@@ -86,11 +86,7 @@ exports.submitTask = async (req, res) => {
         // But for "Strict Plan-Based Logic" we should rely on the DB.
         const effectiveTier = tier || { daily_limit: 0, reward_multiplier: 1.00, task_reward: 0 };
 
-        // BLOCK FREE USERS (Starter)
-        if (!user.account_tier || user.account_tier === 'Starter' || user.account_tier === 'Free') {
-            await t.rollback();
-            return res.status(403).json({ message: 'Free plan cannot perform tasks. Please upgrade.' });
-        }
+
 
         // Global Settings
         const globalSettings = await GlobalSetting.findOne({ transaction: t });

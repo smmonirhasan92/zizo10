@@ -192,7 +192,9 @@ exports.requestRecharge = async (req, res) => {
         const fs = require('fs');
         try {
             const logMsg = `\n[${new Date().toISOString()}] RECHARGE REQUEST:\n- Body: ${JSON.stringify(req.body)}\n- receivedByAgentId: ${receivedByAgentId} (Type: ${typeof receivedByAgentId})\n`;
-            fs.appendFileSync('d:/zizo10/backend/debug_recharge.log', logMsg);
+            const logPath = require('path').join(__dirname, '../logs', 'debug_recharge.log');
+            if (!fs.existsSync(require('path').dirname(logPath))) fs.mkdirSync(require('path').dirname(logPath), { recursive: true });
+            fs.appendFileSync(logPath, logMsg);
         } catch (e) {
             console.error("Log failed:", e);
         }

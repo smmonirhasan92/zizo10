@@ -6,7 +6,10 @@ exports.upgradeAccountTier = async (req, res) => {
     try {
         const userId = req.user.user.id;
         const { planId } = req.body;
-        console.log(`[Upgrade] Request for User ${userId}, Plan ${planId} `);
+        console.log(`[Upgrade] Request for User ${userId}, Plan ${planId}`);
+
+        // Import UserPlan here or at top (assuming it's available in models)
+        const { UserPlan } = require('../models');
 
         const user = await User.findByPk(userId, { transaction: t });
         const plan = await AccountTier.findByPk(planId, { transaction: t });
@@ -18,25 +21,21 @@ exports.upgradeAccountTier = async (req, res) => {
             return res.status(404).json({ message: 'User or Plan not found' });
         }
         if (!wallet) {
-            console.log('[Upgrade] Wallet not found');
             await t.rollback();
             return res.status(404).json({ message: 'Wallet not found' });
         }
 
-        console.log(`[Upgrade] Balance: ${wallet.balance}, Price: ${plan.unlock_price} `);
-
-        // Check Balances (Mixed Wallet Logic: Purchase First, then Main)
+        // Check Balances
         const purchaseBal = parseFloat(user.purchase_balance);
         const mainBal = parseFloat(wallet.balance);
         const planCost = parseFloat(plan.unlock_price);
 
-        console.log(`[Upgrade] Cost: ${planCost} | Purch: ${purchaseBal} | Main: ${mainBal}`);
-
         if ((purchaseBal + mainBal) < planCost) {
             await t.rollback();
-            return res.status(400).json({ message: 'Insufficient Balance (Check Purchase & Main Wallets)' });
+            return res.status(400).json({ message: 'Insufficient Balance' });
         }
 
+        // Deduct Logic
         let remainingCost = planCost;
 
         // Stage 1: Deduct from Purchase Wallet
@@ -48,44 +47,40 @@ exports.upgradeAccountTier = async (req, res) => {
             remainingCost -= purchaseBal;
         }
 
-        // Stage 2: Deduct Remainder from Main Wallet (if needed)
+        // Stage 2: Deduct Remainder from Main Wallet
         if (remainingCost > 0) {
             wallet.balance = mainBal - remainingCost;
             await wallet.save({ transaction: t });
         }
 
-        await user.save({ transaction: t });
+        // Multi-Plan Logic: Create new UserPlan
+        await UserPlan.create({
+            userId: user.id,
+            planName: plan.name,
+            status: 'active',
+            tasks_completed_today: 0,
+            last_task_date: new Date(),
+            purchase_date: new Date()
+        }, { transaction: t });
 
-        /* Legacy Mixed Wallet Logic Removed 
-        // Deduct Remainder from Main Wallet
-        if (remainingCost > 0) {
-            wallet.balance = mainBal - remainingCost;
-            await wallet.save({ transaction: t });
-        }
-        */
-
-        await user.save({ transaction: t });
-
-        // Update User Tier
+        // Update User Tier (For Legacy Display / Badge)
+        // We keep this to show the "latest/highest" plan on profile if needed
         user.account_tier = plan.name;
-
-        // Calculate Validity (Optional logic for future)
-        // ...
 
         await user.save({ transaction: t });
 
         // Log Transaction
         await Transaction.create({
             userId: user.id,
-            type: 'purchase', // or 'plan_upgrade'
-            amount: -plan.unlock_price, // Negative for debit
-            description: `Upgraded to ${plan.name} Plan`,
+            type: 'purchase',
+            amount: -plan.unlock_price,
+            description: `Purchased ${plan.name} Plan`,
             status: 'completed'
         }, { transaction: t });
 
         await AuditLog.create({
-            adminId: user.id, // User Action
-            action: 'Plan Upgrade',
+            adminId: user.id,
+            action: 'Plan Purchase',
             details: `User ${user.username} bought ${plan.name} for ${plan.unlock_price}`
         }, { transaction: t });
 
@@ -93,7 +88,7 @@ exports.upgradeAccountTier = async (req, res) => {
 
         res.json({
             success: true,
-            message: `Successfully upgraded to ${plan.name} `,
+            message: `Successfully activated ${plan.name} plan!`,
             newTier: plan.name,
             newBalance: wallet.balance
         });

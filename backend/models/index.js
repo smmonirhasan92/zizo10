@@ -12,6 +12,7 @@ const TaskLog = require('./TaskLog');
 const TaskAd = require('./TaskAd'); // NEW Model
 const AccountTier = require('./AccountTier'); // NEW Model
 const SupportMessage = require('./SupportMessage'); // NEW Model
+const UserPlan = require('./UserPlan'); // NEW Model for Multi-Plan
 
 // Associations
 User.hasOne(Wallet, { foreignKey: 'userId', onDelete: 'CASCADE' });
@@ -35,8 +36,13 @@ AgentDoc.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(GameLog, { foreignKey: 'userId', as: 'gameLogs' });
 GameLog.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-User.hasMany(TaskLog, { foreignKey: 'userId' }); // Added Association
+User.hasMany(TaskLog, { foreignKey: 'userId' });
 TaskLog.belongsTo(User, { foreignKey: 'userId' });
+
+// UserPlan Associations
+User.hasMany(UserPlan, { foreignKey: 'userId' });
+UserPlan.belongsTo(User, { foreignKey: 'userId' });
+
 
 // Transaction Agent Association
 Transaction.belongsTo(User, { as: 'agent', foreignKey: 'assignedAgentId' });
@@ -50,10 +56,12 @@ module.exports = {
     GameSetting,
     GlobalSetting,
     TaskLog,
-    TaskAd, // Added Export
-    AccountTier, // NEW
+    TaskAd,
+    AccountTier,
     DepositRequest,
     AgentDoc,
     GameLog,
-    SupportMessage
+    SupportMessage,
+    UserPlan
 };
+

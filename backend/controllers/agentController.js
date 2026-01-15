@@ -283,3 +283,120 @@ exports.requestWithdraw = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+// Get Assigned Deposits (For Agent Dashboard)
+exports.getAssignedDeposits = async (req, res) => {
+    try {
+        const agentId = req.user.user.id;
+        const { DepositRequest } = require('../models');
+
+        const deposits = await DepositRequest.findAll({
+            where: {
+                assignedAgentId: agentId,
+                agentStatus: 'pending' // Only pending ones
+            },
+            include: [{ model: User, attributes: ['fullName', 'phone'] }],
+            order: [['createdAt', 'DESC']]
+        });
+        res.json(deposits);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+// Process Assigned Deposit (Agent Action)
+exports.processDeposit = async (req, res) => {
+    const t = await sequelize.transaction();
+    try {
+        const { requestId, action } = req.body; // action: 'approve' | 'reject'
+        const agentId = req.user.user.id;
+        const { DepositRequest } = require('../models');
+
+        const deposit = await DepositRequest.findOne({
+            where: { id: requestId, assignedAgentId: agentId },
+            transaction: t
+        });
+
+        if (!deposit) {
+            await t.rollback();
+            return res.status(404).json({ message: 'Request not found or not assigned to you' });
+        }
+
+        if (deposit.agentStatus !== 'pending') {
+            await t.rollback();
+            return res.status(400).json({ message: 'Already processed' });
+        }
+
+        // Logic for Approval
+        if (action === 'approve') {
+            // Check Agent Balance
+            const agentWallet = await Wallet.findOne({
+                where: { userId: agentId },
+                lock: t.LOCK.UPDATE, // Critical: Lock for concurrency
+                transaction: t
+            });
+
+            const amount = parseFloat(deposit.amount);
+
+            if (!agentWallet || parseFloat(agentWallet.balance) < amount) {
+                await t.rollback();
+                return res.status(400).json({ message: 'Insufficient Agent Balance to process deposit' });
+            }
+
+            // Deduct from Agent
+            agentWallet.balance = parseFloat(agentWallet.balance) - amount;
+            await agentWallet.save({ transaction: t });
+
+            // Credit User
+            const userWallet = await Wallet.findOne({ where: { userId: deposit.userId }, transaction: t });
+            if (!userWallet) {
+                await Wallet.create({ userId: deposit.userId, balance: amount }, { transaction: t });
+            } else {
+                userWallet.balance = parseFloat(userWallet.balance) + amount;
+                await userWallet.save({ transaction: t });
+            }
+
+            // Update Deposit Status
+            deposit.agentStatus = 'accepted';
+            deposit.status = 'approved'; // Final Compassion
+            await deposit.save({ transaction: t });
+
+            // Log Transaction (Agent Debit)
+            await Transaction.create({
+                userId: agentId,
+                type: 'agent_recharge', // Agent recharges User
+                amount: -amount,
+                status: 'completed',
+                description: `Processed Deposit #${requestId} for User ${deposit.userId}`,
+                recipientDetails: `User ID: ${deposit.userId}`
+            }, { transaction: t });
+
+            // Log Transaction (User Credit)
+            await Transaction.create({
+                userId: deposit.userId,
+                type: 'add_money',
+                amount: amount,
+                status: 'completed',
+                description: 'Deposit via Agent',
+                receivedByAgentId: agentId
+            }, { transaction: t });
+
+        } else if (action === 'reject') {
+            deposit.agentStatus = 'rejected';
+            deposit.status = 'rejected'; // Final Rejection
+            await deposit.save({ transaction: t });
+        } else {
+            await t.rollback();
+            return res.status(400).json({ message: 'Invalid Action' });
+        }
+
+        await t.commit();
+        res.json({ message: `Deposit ${action}d successfully` });
+
+    } catch (err) {
+        await t.rollback();
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};

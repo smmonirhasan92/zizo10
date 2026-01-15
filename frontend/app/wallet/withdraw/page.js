@@ -47,8 +47,10 @@ export default function WithdrawalPage() {
 
         try {
             // Basic validation
-            if (parseFloat(form.amount) < 100) { // Min withdraw example
-                throw new Error("Minimum withdrawal is 100 BDT");
+            // Basic validation
+            const minAmount = form.walletType === 'income' ? 500 : 100;
+            if (parseFloat(form.amount) < minAmount) {
+                throw new Error(`Minimum withdrawal for ${form.walletType} wallet is ${minAmount} BDT`);
             }
 
             await api.post('/withdrawal/request', {
@@ -62,7 +64,13 @@ export default function WithdrawalPage() {
             setForm({ ...form, amount: '', accountDetails: '' });
             fetchBalance(); // Refresh balance
         } catch (err) {
-            setError(err.response?.data?.message || err.message || 'Withdrawal failed');
+            // Check for specific Lock Message from Backend (Step 8)
+            const lockMessage = "আপনার একাউন্টে কিছু অসঙ্গতি পাওয়া গেছে, দয়া করে অ্যাডমিনের সাথে যোগাযোগ করুন।";
+            if (err.response?.status === 403 && err.response?.data?.message === lockMessage) {
+                setError(lockMessage);
+            } else {
+                setError(err.response?.data?.message || err.message || 'Withdrawal failed');
+            }
         } finally {
             setSubmitting(false);
         }

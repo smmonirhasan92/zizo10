@@ -51,10 +51,36 @@ export default function TransactionCard({
                     {trx.recipientDetails}
                 </p>
                 {trx.proofImage && (
-                    <a href={`https://zizo10.com/api/${trx.proofImage}`} target="_blank" className="mt-3 flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">📷</div>
-                        <span>View Proof Screenshot</span>
-                    </a>
+                    <div className="mt-3">
+                        {(() => {
+                            // Robust Path Cleaning
+                            let cleanPath = trx.proofImage.replace(/\\/g, '/');
+                            cleanPath = cleanPath.replace(/^api\//, '').replace(/^backend\//, '');
+                            if (cleanPath.startsWith('/')) cleanPath = cleanPath.substring(1);
+
+                            const imgUrl = `http://localhost:5000/${cleanPath}`;
+
+                            return (
+                                <>
+                                    <div className="relative w-full bg-slate-100 rounded-lg overflow-hidden border border-slate-200 mb-2 flex justify-center">
+                                        <img
+                                            src={imgUrl}
+                                            alt="Proof"
+                                            className="h-auto max-h-48 object-contain"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                // Don't show red text, just hide image if broken to keep UI clean, or show icon
+                                            }}
+                                        />
+                                    </div>
+                                    <a href={imgUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+                                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">📷</div>
+                                        <span>View Proof Screenshot</span>
+                                    </a>
+                                </>
+                            );
+                        })()}
+                    </div>
                 )}
             </div>
 

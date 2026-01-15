@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = process.env.USE_LOCAL_DB === 'true' ? require('../config/database_local') : require('../config/database');
 
 const Transaction = sequelize.define('Transaction', {
     id: {
@@ -46,9 +46,21 @@ const Transaction = sequelize.define('Transaction', {
     receivedByAgentId: { // Agent who received the Add Money funds
         type: DataTypes.INTEGER,
         allowNull: true
+    },
+    referenceId: { // Unique constraint to prevent duplicate payments
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        { fields: ['userId'] },
+        { fields: ['type'] },
+        { fields: ['status'] },
+        // Index recipientDetails for searching "Bkash TrxID" (Note: Strings can be long, but usually short enough)
+        { fields: ['recipientDetails'] }
+    ]
 });
 
 module.exports = Transaction;

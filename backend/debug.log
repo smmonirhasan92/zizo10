@@ -550,3 +550,227 @@
 [2025-12-25T04:11:27.165Z] REQUESTING Transactions for AgentID: 3
 [2025-12-25T04:11:27.167Z] FOUND 0 transactions for AgentID: 3
 [DEBUG 103] Transaction 103 NOT FOUND in DB.
+
+[2026-01-15T18:21:31.344Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:21:31.349Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:21:31.355Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:21:31.357Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:22:01.449Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:22:01.453Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:22:01.455Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:22:01.459Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:23:15.343Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:23:15.348Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:23:49.818Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:23:49.823Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:23:49.825Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:23:49.827Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:24:25.735Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:24:25.737Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:24:25.738Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+[2026-01-15T18:24:25.740Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:24:31.038Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:24:31.041Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:24:31.042Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+[2026-01-15T18:24:31.044Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:24:32.372Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:24:32.374Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:25:57.688Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:25:57.691Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:25:57.692Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+[2026-01-15T18:25:57.693Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:27:02.814Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:27:02.816Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:27:02.837Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:27:02.839Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:27:09.340Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:27:09.342Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:27:16.631Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:27:16.633Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:27:49.289Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:27:49.292Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:27:49.375Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:27:49.377Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:28:09.487Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:28:09.489Z] FOUND 1 transactions for AgentID: 188
+[ IDs: 2928 ]
+
+[2026-01-15T18:28:17.837Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:28:17.839Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:28:31.861Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:28:31.864Z] FOUND 0 transactions for AgentID: 188
+
+[2026-01-15T18:28:31.866Z] REQUESTING Transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[2026-01-15T18:28:31.868Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:30:44.763Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:30:44.766Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:30:46.332Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:30:46.336Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:34:35.587Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:34:35.589Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:34:40.215Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:34:40.217Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:34:40.218Z] FOUND 0 transactions for AgentID: 188
+[2026-01-15T18:34:40.219Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:34:52.351Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:34:52.354Z] FOUND 0 transactions for AgentID: 188
+
+[2026-01-15T18:34:52.356Z] REQUESTING Transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[2026-01-15T18:34:52.358Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:36:18.374Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:36:18.376Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:36:19.434Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:36:19.436Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:36:38.810Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:36:38.813Z] FOUND 0 transactions for AgentID: 188
+
+[2026-01-15T18:36:38.815Z] REQUESTING Transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[2026-01-15T18:36:38.817Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:37:20.178Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:37:20.180Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:37:20.181Z] FOUND 0 transactions for AgentID: 188
+[2026-01-15T18:37:20.182Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:37:21.612Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:37:21.614Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:37:21.615Z] FOUND 0 transactions for AgentID: 188
+[2026-01-15T18:37:21.616Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:37:23.251Z] REQUESTING Transactions for AgentID: 188
+
+[2026-01-15T18:37:23.253Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:37:23.254Z] FOUND 0 transactions for AgentID: 188
+[2026-01-15T18:37:23.255Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:37:25.170Z] REQUESTING Transactions for AgentID: 188
+[2026-01-15T18:37:25.173Z] FOUND 0 transactions for AgentID: 188
+
+[2026-01-15T18:37:25.174Z] REQUESTING Transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+[2026-01-15T18:37:25.176Z] FOUND 0 transactions for AgentID: 188
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:46:58.546Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:46:58.548Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:50:49.909Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:50:49.912Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:50:49.918Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:50:49.920Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:51:00.047Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:51:00.050Z] FOUND 1 transactions for AgentID: 187
+[ IDs: 2931 ]
+
+[2026-01-15T18:51:21.918Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:51:21.921Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:51:33.327Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:51:33.329Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:51:33.336Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:51:33.337Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:56:20.316Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:56:20.320Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:56:20.325Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:56:20.327Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:56:40.688Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:56:40.691Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:56:40.696Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:56:40.697Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:56:46.816Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:56:46.819Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 
+
+[2026-01-15T18:56:46.824Z] REQUESTING Transactions for AgentID: 187
+[2026-01-15T18:56:46.825Z] FOUND 0 transactions for AgentID: 187
+[DEBUG 103] Found ID 103. Status: 'completed' | AssignedAgent: null | ReceivedByAgent: null | Type: 

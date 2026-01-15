@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = process.env.USE_LOCAL_DB === 'true' ? require('../config/database_local') : require('../config/database');
 
 const Wallet = sequelize.define('Wallet', {
     id: {
@@ -23,6 +23,10 @@ const Wallet = sequelize.define('Wallet', {
     currency: {
         type: DataTypes.STRING,
         defaultValue: 'BDT' // Or appropriate currency
+    },
+    agent_balance: {
+        type: DataTypes.DECIMAL(10, 2),
+        defaultValue: 0.00
     },
     isActive: {
         type: DataTypes.BOOLEAN,

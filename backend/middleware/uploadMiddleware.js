@@ -1,9 +1,17 @@
 const multer = require('multer');
 const path = require('path');
 
+const fs = require('fs');
+
+// Ensure uploads directory exists (Shared Hosting Fix)
+const uploadDir = './uploads/';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 // Set storage engine
 const storage = multer.diskStorage({
-    destination: './uploads/',
+    destination: uploadDir,
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }

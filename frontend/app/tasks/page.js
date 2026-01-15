@@ -1,169 +1,175 @@
 'use client';
 import { useState, useEffect } from 'react';
-import api from '../../services/api';
-import TaskCard from '../../components/TaskCard';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, Crown, CheckCircle, X } from 'lucide-react';
+import api from '@/services/api';
+import { CheckCircle, AlertTriangle, PlayCircle, Star, ShoppingBag, Video } from 'lucide-react';
 
-export default function TaskPage() {
-    const router = useRouter();
-    const [status, setStatus] = useState(null);
+export default function TaskCenterPage() {
+    const [adTasks, setAdTasks] = useState([]);
+    const [reviewTasks, setReviewTasks] = useState([]);
+
+    const [selectedTasks, setSelectedTasks] = useState([]); // For Review Tasks
+    const [activeTab, setActiveTab] = useState('review'); // 'review' or 'ad'
+
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-
-    const fetchStatus = async () => {
-        try {
-            const res = await api.get('/task/status');
-            setStatus(res.data);
-            setLoading(false);
-        } catch (err) {
-            console.error(err);
-            setError('Failed to load tasks. Please try again.');
-            setLoading(false);
-        }
-    };
+    const [submitting, setSubmitting] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
-        fetchStatus();
+        fetchTasks();
     }, []);
 
-    if (loading) return <div className="text-white text-center p-10">Loading Task Center...</div>;
-    if (error) return <div className="text-red-500 text-center p-10">{error}</div>;
-
-    const { tasksCompleted, dailyLimit, taskAds, tierName } = status;
-
-    const handleTaskClick = (taskNumber, adId) => {
-        if (!status) return;
-
-        // Restriction Check: If Starter/Free, Show Modal
-        // Restriction Check: If !canWork, Show Modal
-        if (status.canWork === false) {
-            setShowUpgradeModal(true);
-            return;
+    const fetchTasks = async () => {
+        try {
+            const res = await api.get('/task/status');
+            // Backend sends { adTasks: [], reviewTasks: [] }
+            setAdTasks(res.data.adTasks || []);
+            setReviewTasks(res.data.reviewTasks || []);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
         }
-
-        // Redirect to Work Page with adId
-        router.push(`/tasks/work?task=${taskNumber}&adId=${adId || ''}`);
     };
 
+    // --- Review Task Logic ---
+    const toggleReviewTask = (taskId) => {
+        if (selectedTasks.includes(taskId)) {
+            setSelectedTasks(selectedTasks.filter(id => id !== taskId));
+        } else {
+            if (selectedTasks.length >= 5) {
+                alert("You can select max 5 tasks per batch!");
+                return;
+            }
+            setSelectedTasks([...selectedTasks, taskId]);
+        }
+    };
+
+    const handleApplyReviews = async () => {
+        if (selectedTasks.length < 5) {
+            alert("Please select at least 5 tasks to complete the set.");
+            return;
+        }
+        setSubmitting(true);
+        try {
+            // Placeholder: Review Task Submission logic
+            await api.post('/task/submit', { taskIds: selectedTasks, type: 'review' });
+            setMessage(`🎉 Reviews Submitted Successfully!`);
+            setSelectedTasks([]);
+        } catch (err) {
+            setMessage('❌ Error: ' + (err.response?.data?.message || err.message));
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    // --- Ad Task Logic ---
+    const handleWatchAd = (ad) => {
+        window.open(ad.adLink, '_blank');
+        // Logic to claim reward after timer? 
+        // For now, simple alert or auto-claim
+        alert(`Opened Ad: ${ad.title}. Reward added (Simulated).`);
+    };
+
+    if (loading) return <div className="p-10 text-center text-white">Loading Tasks...</div>;
+
     return (
-        <div className="min-h-screen bg-black text-white p-4 pb-20">
-            {/* Header */}
-            <header className="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
-                <div className="flex items-center gap-3">
+        <div className="min-h-screen bg-slate-900 pb-24 p-4">
+            <header className="mb-6">
+                <h1 className="text-2xl font-bold text-white mb-4">Task Center</h1>
+
+                {/* Tabs */}
+                <div className="flex bg-slate-800 p-1 rounded-xl">
                     <button
-                        onClick={() => router.push('/dashboard')}
-                        className="p-2 bg-gray-800 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 transition"
+                        onClick={() => setActiveTab('review')}
+                        className={`flex-1 py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'review' ? 'bg-slate-700 text-yellow-400 shadow-lg' : 'text-slate-400 hover:text-white'}`}
                     >
-                        <ArrowLeft className="w-5 h-5" />
+                        <Star className="w-4 h-4" />
+                        Smart Reviews
                     </button>
-                    <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-                        Task Center
-                    </h1>
-                </div>
-                <div className="text-right">
-                    <p className="text-sm text-gray-400">Today&apos;s Progress</p>
-                    <p className="text-xl font-bold text-green-400 mb-1">
-                        {tasksCompleted} / {dailyLimit}
-                    </p>
-                    <Link href="/plans" className="text-xs font-bold text-purple-400 hover:text-purple-300 border border-purple-500/30 px-2 py-1 rounded-lg">
-                        + Increase Limit
-                    </Link>
+                    <button
+                        onClick={() => setActiveTab('ad')}
+                        className={`flex-1 py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'ad' ? 'bg-slate-700 text-blue-400 shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        <Video className="w-4 h-4" />
+                        Video Ads
+                    </button>
                 </div>
             </header>
 
-            {/* Task Grid - 2 Columns */}
-            <div className="grid grid-cols-2 gap-4">
-                {[...Array(dailyLimit)].map((_, index) => {
-                    const taskNum = index + 1;
+            {message && (
+                <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 rounded-xl animate-in zoom-in">
+                    {message}
+                </div>
+            )}
 
-                    // Assign Ad from List (Cycle if fewer ads than limit)
-                    const adData = taskAds && taskAds.length > 0
-                        ? taskAds[index % taskAds.length]
-                        : null;
+            {/* --- TAB: SMART REVIEWS (NEW) --- */}
+            {activeTab === 'review' && (
+                <div className="animate-in fade-in slide-in-from-right-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <p className="text-xs text-slate-400">Select 5 tasks to submit.</p>
+                        <span className="text-xs bg-yellow-400/10 text-yellow-400 px-2 py-1 rounded border border-yellow-400/20">Selected: {selectedTasks.length}/5</span>
+                    </div>
 
-                    let taskStatus = 'locked';
-                    let isLocked = true;
-
-                    if (taskNum <= tasksCompleted) {
-                        taskStatus = 'completed';
-                        isLocked = true;
-                    } else if (taskNum === tasksCompleted + 1) {
-                        taskStatus = 'active';
-                        isLocked = false;
-                    }
-
-                    return (
-                        <TaskCard
-                            key={taskNum}
-                            taskNumber={taskNum}
-                            status={taskStatus}
-                            isLocked={isLocked}
-                            adData={adData}
-                            onClick={() => handleTaskClick(taskNum, adData?.id)}
-                        />
-                    );
-                })}
-            </div>
-
-            <div className="mt-8 text-center text-gray-500 text-sm">
-                <p>Complete tasks daily to earn rewards.</p>
-                <p>Tasks reset every day at midnight.</p>
-            </div>
-
-            {/* Upgrade Modal */}
-            {showUpgradeModal && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden animate-slide-up relative">
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setShowUpgradeModal(false)}
-                            className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition z-10"
-                        >
-                            <X className="w-4 h-4 text-slate-500" />
-                        </button>
-
-                        {/* Graphic */}
-                        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 text-center relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl"></div>
-                            <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-400/20 rounded-full -ml-10 -mb-10 blur-xl"></div>
-
-                            <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center mb-4 border border-white/30 shadow-lg">
-                                <Crown className="w-8 h-8 text-white fill-yellow-400" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {reviewTasks.map(task => (
+                            <div key={task.id} onClick={() => toggleReviewTask(task.id)}
+                                className={`relative p-4 rounded-2xl border-2 transition-all cursor-pointer shadow-lg overflow-hidden group
+                                    ${selectedTasks.includes(task.id)
+                                        ? 'bg-gradient-to-br from-purple-600/20 to-blue-600/20 border-green-400 shadow-green-400/10'
+                                        : 'bg-slate-800/50 border-slate-700/50 hover:border-slate-500'}`}
+                            >
+                                <div className={`absolute top-4 right-4 z-10 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTasks.includes(task.id) ? 'bg-green-500 border-green-500 scale-110' : 'border-slate-500 bg-slate-900/50'}`}>
+                                    {selectedTasks.includes(task.id) && <CheckCircle className="w-4 h-4 text-white" />}
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="w-20 h-20 rounded-xl bg-slate-700 shrink-0 overflow-hidden">
+                                        <img src={task.productImage} alt={task.productName} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="font-bold text-white mb-1 leading-tight">{task.productName}</h3>
+                                        <p className="text-xs text-slate-400 line-clamp-3">{task.reviewText}</p>
+                                    </div>
+                                </div>
                             </div>
-                            <h2 className="text-2xl font-bold text-white mb-1">Premium Plan</h2>
-                            <p className="text-indigo-100 text-sm">Unlock Required</p>
-                        </div>
+                        ))}
+                    </div>
 
-                        {/* Content */}
-                        <div className="p-6 text-center">
-                            <h3 className="font-bold text-slate-800 text-lg mb-2">
-                                Upgrade to Start Earning!
-                            </h3>
-                            <p className="text-slate-500 text-sm leading-relaxed mb-6">
-                                To complete daily tasks and withdraw earnings, you must have an active <strong>Premium Package</strong>.
-                                <br /><br />
-                                Your daily income limit depends on your plan tier.
-                            </p>
+                    <div className="fixed bottom-20 left-4 right-4 md:left-64 md:right-10">
+                        <button
+                            onClick={handleApplyReviews}
+                            disabled={selectedTasks.length < 5 || submitting}
+                            className={`w-full py-4 rounded-2xl font-bold text-lg shadow-xl shadow-black/20 transition-all active:scale-95 ${selectedTasks.length >= 5 ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white' : 'bg-slate-700 text-slate-400 cursor-not-allowed'}`}
+                        >
+                            {submitting ? 'Verifying...' : `Apply / Complete (${selectedTasks.length}/5)`}
+                        </button>
+                    </div>
+                </div>
+            )}
 
-                            <div className="space-y-3">
-                                <Link
-                                    href="/plans"
-                                    className="block w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg shadow-purple-200 hover:opacity-90 transition active:scale-95"
-                                >
-                                    View Plans & Upgrade
-                                </Link>
+            {/* --- TAB: VIDEO ADS (OLD/RESTORED) --- */}
+            {activeTab === 'ad' && (
+                <div className="animate-in fade-in slide-in-from-left-4 space-y-4">
+                    {adTasks.length === 0 ? (
+                        <div className="text-center py-20 text-slate-500">No Video Ads Available Today.</div>
+                    ) : (
+                        adTasks.map(ad => (
+                            <div key={ad.id} className="bg-[#121620] p-4 rounded-2xl border border-white/5 flex gap-4 items-center group hover:border-blue-500/30 transition-all">
+                                <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                                    <PlayCircle className="w-6 h-6" />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-bold text-white">{ad.title}</h3>
+                                    <p className="text-xs text-slate-400">{ad.reviewText || 'Watch video to earn reward'}</p>
+                                </div>
                                 <button
-                                    onClick={() => setShowUpgradeModal(false)}
-                                    className="block w-full py-3 text-slate-400 font-medium text-sm hover:text-slate-600 transition"
+                                    onClick={() => handleWatchAd(ad)}
+                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold text-white transition-colors"
                                 >
-                                    Maybe Later
+                                    Watch & Earn
                                 </button>
                             </div>
-                        </div>
-                    </div>
+                        ))
+                    )}
                 </div>
             )}
         </div>

@@ -49,75 +49,20 @@ exports.register = async (req, res) => {
             }
         }
 
-        // Referral Logic (Zizo 10 Logic Flow)
-        let referrerCodeStored = null;
+        // Referral Link Logic
+        let referredBy = null;
         if (referralCode) {
-            console.log(`[Register] Processing Referral Code: ${referralCode}`);
+            console.log(`[Register] Linking Referral Code: ${referralCode}`);
             const referrer = await User.findOne({ where: { referral_code: referralCode } }, { transaction: t });
 
-            if (!referrer) {
-                console.log(`[Register] Referrer NOT found for code: ${referralCode}`);
-            } else {
-                console.log(`[Register] Referrer Found: ${referrer.username} (ID: ${referrer.id})`);
-                referrerCodeStored = referralCode;
-
-                // Fetch Settings
-                const settings = await GlobalSetting.findOne() || { referral_bonus_amount: 50, silver_requirement: 10, gold_requirement: 50 };
-
-                // Credit Bonus (Check Currency Preference)
-                const referrerBonus = parseFloat(settings.referral_bonus_amount);
-
-                // Credit Referrer
-                if (settings.referral_reward_currency === 'purchase') {
-                    referrer.purchase_balance = parseFloat(referrer.purchase_balance) + referrerBonus;
-                } else {
-                    referrer.income_balance = parseFloat(referrer.income_balance) + referrerBonus;
-                }
+            if (referrer) {
+                referredBy = referrer.id;
+                // Increment referrer count
                 referrer.referral_count = (referrer.referral_count || 0) + 1;
                 await referrer.save({ transaction: t });
-
-                // Log Referrer Transaction
-                await Transaction.create({
-                    userId: referrer.id,
-                    type: 'referral_bonus',
-                    amount: referrerBonus,
-                    status: 'completed',
-                    description: `Referral Bonus for inviting ${username}`,
-                    recipientDetails: `User: ${phone}`
-                }, { transaction: t });
-
-                // Auto-Promotion Check (Referrer)
-                let promoted = false;
-                let newTier = null;
-                const refCount = referrer.referral_count;
-
-                // Define Tiers (Higher Priority First)
-                if (refCount >= (settings.diamond_requirement || 250) && referrer.account_tier !== 'Diamond' && referrer.account_tier !== 'VIP') {
-                    referrer.account_tier = 'Diamond';
-                    newTier = 'Diamond';
-                    promoted = true;
-                } else if (refCount >= (settings.platinum_requirement || 100) && referrer.account_tier !== 'Diamond' && referrer.account_tier !== 'Platinum' && referrer.account_tier !== 'VIP') {
-                    referrer.account_tier = 'Platinum';
-                    newTier = 'Platinum';
-                    promoted = true;
-                } else if (refCount >= settings.gold_requirement && !['Diamond', 'Platinum', 'Gold', 'VIP'].includes(referrer.account_tier)) {
-                    referrer.account_tier = 'Gold';
-                    newTier = 'Gold';
-                    promoted = true;
-                } else if (refCount >= settings.silver_requirement && !['Diamond', 'Platinum', 'Gold', 'Silver', 'VIP'].includes(referrer.account_tier)) {
-                    referrer.account_tier = 'Silver';
-                    newTier = 'Silver';
-                    promoted = true;
-                }
-
-                // Log Promotion (Audit)
-                if (promoted) {
-                    await AuditLog.create({
-                        adminId: referrer.id,
-                        action: 'Auto-Promotion',
-                        details: `User ${referrer.username} promoted to ${newTier} (Invites: ${referrer.referral_count})`
-                    }, { transaction: t });
-                }
+                console.log(`[Register] Linked to Referrer: ${referrer.username}`);
+            } else {
+                console.log(`[Register] Referrer NOT found for code: ${referralCode}`);
             }
         }
 
@@ -143,7 +88,8 @@ exports.register = async (req, res) => {
             account_tier: creatorId ? 'Active' : 'Starter',
             tasks_completed_today: 0,
             referral_code: myReferralCode,
-            referred_by: referrerCodeStored
+            referredBy: referredBy, // Corrected Field
+            accountStatus: 'pending' // Explicitly set to pending per Blueprint
         }, { transaction: t });
 
         // Log Welcome Bonus Transaction
@@ -218,6 +164,18 @@ exports.login = async (req, res) => {
 
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        // Check Account Status (Strict Activation Gateway)
+        if (user.accountStatus === 'pending') {
+            return res.status(403).json({
+                message: 'Account not active',
+                code: 'ACCOUNT_PENDING',
+                user: { id: user.id, username: user.username, phone: user.phone }
+            });
+        }
+        if (user.accountStatus === 'suspended') {
+            return res.status(403).json({ message: 'Account has been suspended. Please contact Support.', code: 'ACCOUNT_SUSPENDED' });
         }
 
         // Generate JWT

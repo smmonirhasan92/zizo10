@@ -1,4 +1,5 @@
 const { Transaction, Wallet, User, sequelize } = require('../models');
+const logger = require('../utils/logger');
 
 // Methods for Payment Settings moved to settingsController.js
 
@@ -156,7 +157,7 @@ exports.completeTransaction = async (req, res) => {
             return res.status(400).json({ message: 'Transaction already processed' });
         }
 
-        console.log(`Processing transaction ${transactionId} as ${status}`);
+        logger.audit(`Processing transaction ${transactionId} as ${status}`, { transactionId, status, agentId });
 
         transaction.status = status;
         transaction.adminComment = comment || 'Processed by System';
@@ -303,7 +304,7 @@ exports.completeTransaction = async (req, res) => {
 
     } catch (err) {
         await t.rollback();
-        console.error('Transaction Error:', err);
+        logger.error(`Transaction Error: ${err.message}`, { stack: err.stack, transactionId: req.body.transactionId });
         // Return clear error messages for "Insufficient Funds" etc
         res.status(500).json({ message: err.message || 'Server Error Processing Transaction' });
     }

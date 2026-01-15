@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = process.env.USE_LOCAL_DB === 'true' ? require('../config/database_local') : require('../config/database');
 
 const User = sequelize.define('User', {
     id: {
@@ -22,6 +22,11 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     referral_code: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: true
+    },
+    agent_referral_code: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: true
@@ -60,6 +65,18 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('pending', 'approved', 'rejected', 'none'),
         defaultValue: 'none'
     },
+    // Step 8: Safety & Punishment
+    isWithdrawLocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+    },
+    // Account Access Control (Blueprint Item 3)
+    accountStatus: {
+        type: DataTypes.ENUM('pending', 'active', 'suspended'),
+        defaultValue: 'pending', // Default is pending, Admin must approve
+        allowNull: false
+    },
     kycImage: {
         type: DataTypes.STRING,
         allowNull: true
@@ -96,7 +113,14 @@ const User = sequelize.define('User', {
         allowNull: false
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        { unique: true, fields: ['phone'] },
+        { unique: true, fields: ['username'] },
+        { unique: true, fields: ['referral_code'] },
+        { fields: ['country'] }, // Good for filtering
+        { fields: ['accountStatus'] } // Good for approval filtering
+    ]
 });
 
 module.exports = User;

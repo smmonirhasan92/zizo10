@@ -140,27 +140,11 @@ export default function AdminDashboard() {
                     />
 
                     <DashboardCard
-                        href="/admin/game-settings"
-                        title="Game Settings"
-                        description="Game & system rules"
-                        icon={Settings}
-                        colorClass="purple"
-                    />
-
-                    <DashboardCard
                         href="/admin/settings"
                         title="System Control"
                         description="Limits & Rewards"
                         icon={Settings}
                         colorClass="teal"
-                    />
-
-                    <DashboardCard
-                        href="/admin/game-history"
-                        title="Game History"
-                        description="View all game bets"
-                        icon={Trophy}
-                        colorClass="orange"
                     />
 
                     <DashboardCard

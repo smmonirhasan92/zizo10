@@ -15,13 +15,24 @@ exports.requestWithdrawal = async (req, res) => {
 
         const user = await User.findByPk(userId, { include: [{ model: Wallet }], transaction: t });
 
+        // Safety Check 1: User Existence
         if (!user) {
             await t.rollback();
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Safety Check 2: Withdraw Lock (Step 8)
+        if (user.isWithdrawLocked) {
+            await t.rollback();
+            return res.status(403).json({ message: 'আপনার একাউন্টে কিছু অসঙ্গতি পাওয়া গেছে, দয়া করে অ্যাডমিনের সাথে যোগাযোগ করুন।' });
+        }
+
         // Balance Check & Deduction
         if (walletType === 'income') {
+            if (parsedAmount < 500) {
+                await t.rollback();
+                return res.status(400).json({ message: 'Minimum Income withdrawal is 500 BDT' });
+            }
             if (parseFloat(user.income_balance) < parsedAmount) {
                 await t.rollback();
                 return res.status(400).json({ message: 'Insufficient Income Balance' });

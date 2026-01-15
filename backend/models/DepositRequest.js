@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = process.env.USE_LOCAL_DB === 'true' ? require('../config/database_local') : require('../config/database');
 
 const DepositRequest = sequelize.define('DepositRequest', {
     id: {
@@ -30,6 +30,20 @@ const DepositRequest = sequelize.define('DepositRequest', {
     adminComment: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    // Admin Mediator System (Step 3)
+    assignedAgentId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    adminId: { // Admin who assigned the agent
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    agentStatus: {
+        type: DataTypes.ENUM('pending', 'accepted', 'rejected'),
+        allowNull: true,
+        defaultValue: 'pending'
     }
 }, {
     tableName: 'deposit_requests',

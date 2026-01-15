@@ -39,13 +39,18 @@ router.post('/manage-transaction', authMiddleware, adminCheck, adminController.m
 router.get('/logs', authMiddleware, adminCheck, adminController.getAuditLogs);
 router.get('/audit/financial', authMiddleware, adminCheck, adminController.getSystemFinancials);
 router.post('/deposit-request', authMiddleware, adminCheck, adminController.handleDepositRequest);
+router.post('/deposit-assign', authMiddleware, adminCheck, adminController.assignDepositToAgent); // Mediator Flow
 router.post('/game-status', authMiddleware, adminCheck, adminController.updateGameStatus);
 router.get('/user/:userId/game-stats', authMiddleware, adminCheck, gameController.getUserGameStats);
 router.get('/game-logs', authMiddleware, adminCheck, gameController.getGameLogs);
 
 // Deposit Settings
-router.get('/deposit-settings', authMiddleware, adminCheck, gameController.getDepositSettings);
-router.post('/deposit-settings', authMiddleware, adminCheck, gameController.updateDepositSettings);
+// Deposit Settings
+router.get('/deposit-settings', authMiddleware, adminCheck, settingsController.getPaymentSettings);
+router.post('/deposit-settings', authMiddleware, adminCheck, settingsController.updatePaymentSettings);
+
+// Global Search (Blueprint Item 2)
+router.get('/global-search', authMiddleware, adminCheck, adminController.globalSearch);
 
 // Agent Management Routes
 router.post('/agent', authMiddleware, adminCheck, agentController.createAgent);
@@ -55,9 +60,17 @@ router.post('/agent/balance', authMiddleware, adminCheck, agentController.adjust
 
 // User Management Routes
 router.get('/users', authMiddleware, adminCheck, userController.getAllUsers);
-router.put('/user/role', authMiddleware, adminCheck, userController.updateUserRole);
+
+// Specific Routes FIRST (to avoid shadowing by :id)
+router.put('/user/role', authMiddleware, adminCheck, userController.updateUserRole); // Update user role
+router.put('/user/status', authMiddleware, adminCheck, userController.updateAccountStatus); // Approve/Suspend User (Blueprint Item 3)
 router.post('/user/verify-agent', authMiddleware, adminCheck, agentController.verifyAgent);
 router.put('/user/reset-password', authMiddleware, adminCheck, userController.adminResetPassword);
+router.post('/user/balance-adjust', authMiddleware, adminCheck, adminController.adjustUserBalance); // Manual Balance
+
+// Generic Routes LAST
+router.get('/user/:id', authMiddleware, adminCheck, adminController.getUserDetails);
+router.put('/user/:id', authMiddleware, adminCheck, adminController.updateFullUserDetails); // New Master Update Route
 
 // Task Ad Management
 router.post('/task-ad', authMiddleware, adminCheck, adminController.createTaskAd);
@@ -73,5 +86,11 @@ router.get('/tiers', authMiddleware, adminCheck, adminController.getAccountTiers
 router.post('/tiers', authMiddleware, adminCheck, adminController.updateAccountTier);
 router.delete('/tiers/:id', authMiddleware, adminCheck, adminController.deleteAccountTier);
 
+
+const notificationController = require('../controllers/notificationController');
+
+// Admin Notification Routes
+router.post('/admin/message/send', authMiddleware, adminCheck, notificationController.sendAdminMessage);
+router.post('/admin/message/bulk', authMiddleware, adminCheck, notificationController.sendBulkMessage);
 
 module.exports = router;

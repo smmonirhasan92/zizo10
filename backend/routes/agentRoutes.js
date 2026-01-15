@@ -27,6 +27,8 @@ const agentCheck = async (req, res, next) => {
 router.get('/stats', authMiddleware, agentCheck, agentController.getSettlementStats);
 router.post('/topup', authMiddleware, agentCheck, agentController.requestTopup);
 router.post('/withdraw', authMiddleware, agentCheck, agentController.requestWithdraw);
+router.get('/deposits', authMiddleware, agentCheck, agentController.getAssignedDeposits); // Fetch Assigned
+router.post('/process-deposit', authMiddleware, agentCheck, agentController.processDeposit); // Approve/Reject
 router.get('/my-transactions', authMiddleware, agentCheck, require('../controllers/transactionController').getAssignedTransactions);
 
 module.exports = router;

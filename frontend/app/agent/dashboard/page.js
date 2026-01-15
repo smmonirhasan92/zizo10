@@ -97,6 +97,13 @@ export default function AgentDashboard() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
+                    {/* Switch to User Mode Button */}
+                    <button
+                        onClick={() => router.push('/dashboard')}
+                        className="px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-[10px] font-bold uppercase tracking-wider hover:bg-indigo-500/30 transition flex items-center gap-1.5"
+                    >
+                        User Mode <ChevronRight className="w-3 h-3" />
+                    </button>
                     <button className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition">
                         <Bell className="w-5 h-5" />
                     </button>

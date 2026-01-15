@@ -49,11 +49,11 @@ const withPWA = withPWAInit({
 
 const nextConfig = {
   /* config options here */
-  output: 'export',
-  images: {
-    unoptimized: true,
-  },
-  trailingSlash: true,
+  // output: 'export', // Disabled for Dynamic Admin Panel
+  // images: {
+  //   unoptimized: true,
+  // },
+  // trailingSlash: true, // Disabled for Dynamic Routing consistency
   typescript: {
     ignoreBuildErrors: true,
   },

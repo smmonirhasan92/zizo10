@@ -12,4 +12,10 @@ router.put('/change-password', authMiddleware, userController.changePassword);
 router.get('/plans', authMiddleware, userController.getAccountPlans);
 router.post('/upgrade-tier', authMiddleware, userController.upgradeAccountTier);
 
+const notificationController = require('../controllers/notificationController');
+
+// Notification Routes (Step 7)
+router.get('/notifications/my', authMiddleware, notificationController.getMyNotifications);
+router.post('/notifications/read', authMiddleware, notificationController.markAsRead);
+
 module.exports = router;

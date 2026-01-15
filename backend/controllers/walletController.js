@@ -492,3 +492,19 @@ exports.withdrawGameFunds = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+// Get User Transaction History
+exports.getHistory = async (req, res) => {
+    try {
+        const userId = req.user.user.id;
+        const transactions = await Transaction.findAll({
+            where: { userId },
+            order: [['createdAt', 'DESC']],
+            limit: 50 // Last 50 transactions
+        });
+        res.json(transactions);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};

@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const hpp = require('hpp');
+const logger = require('./utils/logger');
 
 // Load environment variables
 dotenv.config();
@@ -38,6 +39,13 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
+// DEBUG LOGGER (Requested "Road Lock")
+// DEBUG LOGGER (Requested "Road Lock")
+app.use((req, res, next) => {
+    logger.info(`[REQUEST] ${req.method} ${req.url} - IP: ${req.ip}`);
+    next();
+});
+
 
 // Test Route
 app.get('/', (req, res) => {
@@ -53,7 +61,6 @@ const authRoutes = require('./routes/authRoutes');
 const walletRoutes = require('./routes/walletRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const gameRoutes = require('./routes/gameRoutes');
 const userRoutes = require('./routes/userRoutes');
 const taskRoutes = require('./routes/taskRoutes'); // Task Routes
 const supportRoutes = require('./routes/supportRoutes'); // Support Routes
@@ -66,7 +73,6 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/transaction', transactionRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/game', gameRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/task', taskRoutes);
 app.use('/api/support', supportRoutes); // Support Routes
@@ -74,7 +80,7 @@ app.use('/api/withdrawal', withdrawalRoutes); // Withdrawal Routes
 app.use('/api/agent', agentRoutes); // Agent Routes
 
 // Sync Database and Start Server
-sequelize.sync() // alter: true disabled to prevent DB lock/errors
+sequelize.sync({ alter: true }) // Enabled for Schema Updates
     .then(() => {
         console.log('Database connected and synced!');
         app.listen(PORT, () => {

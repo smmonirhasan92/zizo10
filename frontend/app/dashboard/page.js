@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import BottomNav from '../../components/BottomNav';
 import ImageSlider from '../../components/ImageSlider';
 import Loading from '../../components/Loading'; // Custom Skeleton
+import NotificationBell from '../../components/ui/NotificationBell'; // Step 7
 import { Bell, Zap, Send, Smartphone, Plus, Gamepad2, Headset, Wallet, ArrowRight, User, History, CheckCircle, TrendingUp, DollarSign, ArrowDownLeft, ChevronUp, ChevronDown, Share2 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -20,10 +21,18 @@ export default function DashboardPage() {
         const fetchUser = async () => {
             try {
                 const res = await api.get('/auth/me');
-                if (res.data.role === 'agent') {
-                    router.push('/agent/dashboard');
+                // ALLOW AGENTS to access User Dashboard (Requested Feature)
+                // if (res.data.role === 'agent') {
+                //     router.push('/agent/dashboard');
+                //     return;
+                // }
+
+                // Telegram Gateway: Redirect Pending Users
+                if (res.data.accountStatus === 'pending') {
+                    router.push('/notice');
                     return;
                 }
+
                 setUser(res.data);
             } catch (err) {
                 if (err.response && err.response.status === 401) {
@@ -110,6 +119,7 @@ export default function DashboardPage() {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
+                            <NotificationBell />
                             <Link href="/support" className="relative p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
                                 <Headset className="w-5 h-5 text-slate-300" />
                                 {activeBalance === 'wallet' && <span className="absolute top-1.5 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-[#1A1F2B]"></span>}
@@ -215,43 +225,30 @@ export default function DashboardPage() {
                         </div>
 
                         <div className="space-y-3">
-                            {/* Example Task Card */}
+                            {/* Smart Tasks Card */}
                             <Link href="/tasks" className="block bg-[#121620] p-4 rounded-2xl border border-white/5 hover:border-white/10 transition-colors group">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
                                         <CheckCircle className="w-5 h-5" />
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className="text-sm font-bold text-white">Watch Daily Ad</h4>
+                                        <h4 className="text-sm font-bold text-white">Daily Review Tasks</h4>
                                         <div className="flex items-center gap-2 mt-1">
                                             <div className="h-1 flex-1 bg-slate-800 rounded-full overflow-hidden">
                                                 <div className="h-full bg-blue-500 w-[60%] rounded-full"></div>
                                             </div>
-                                            <span className="text-[9px] text-slate-400">60% Done</span>
+                                            <span className="text-[9px] text-slate-400">Tap to Start</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-end">
-                                        <span className="text-sm font-bold text-yellow-400">+৳10</span>
+                                        <span className="text-sm font-bold text-yellow-400">+৳50</span>
                                         <ChevronRight className="w-4 h-4 text-slate-600" />
                                     </div>
                                 </div>
                             </Link>
 
                             {/* Game Teaser */}
-                            <Link href="/game" className="block bg-[#121620] p-4 rounded-2xl border border-white/5 hover:border-white/10 transition-colors group">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center text-rose-400 group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                        <Gamepad2 className="w-5 h-5" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h4 className="text-sm font-bold text-white">Flip & Win</h4>
-                                        <p className="text-[10px] text-slate-400 mt-0.5">Double your money instantly</p>
-                                    </div>
-                                    <div className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 text-[10px] font-bold border border-rose-500/20">
-                                        Play
-                                    </div>
-                                </div>
-                            </Link>
+
                         </div>
                     </div>
 

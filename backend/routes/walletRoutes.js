@@ -29,6 +29,9 @@ router.post('/transfer', authMiddleware, walletController.transferMoney);
 router.get('/balance', authMiddleware, walletController.getBalance);
 router.post('/recharge', authMiddleware, upload.single('proofImage'), walletController.requestRecharge);
 
+// History
+router.get('/history', authMiddleware, walletController.getHistory);
+
 // router.post('/activate', authMiddleware, upload.single('kycImage'), walletController.activateWallet);
 
 module.exports = router;

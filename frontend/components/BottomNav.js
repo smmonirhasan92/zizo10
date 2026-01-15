@@ -10,7 +10,6 @@ export default function BottomNav() {
         { name: 'Home', href: '/dashboard', icon: Home },
         { name: 'Recharge', href: '/wallet/recharge', icon: CreditCard },
         { name: 'Send', href: '/wallet/send', icon: Send },
-        { name: 'Game', href: '/game', icon: Gamepad2 },
         { name: 'Support', href: '/support', icon: Headset },
     ];
 

@@ -1,13 +1,13 @@
-const { GameSetting, GlobalSetting } = require('../models');
+const { Setting, GlobalSetting } = require('../models');
 
 // Get Payment Settings
 exports.getPaymentSettings = async (req, res) => {
     try {
-        const bkashNumber = await GameSetting.findOne({ where: { settingName: 'bkash_number' } });
-        const bankDetails = await GameSetting.findOne({ where: { settingName: 'bank_details' } });
+        const bkashNumber = await Setting.findOne({ where: { settingName: 'bkash_number' } });
+        const bankDetails = await Setting.findOne({ where: { settingName: 'bank_details' } });
 
         // Fetch Agent Deposit Numbers
-        const depositAgentsSetting = await GameSetting.findOne({ where: { settingName: 'deposit_agents' } });
+        const depositAgentsSetting = await Setting.findOne({ where: { settingName: 'deposit_agents' } });
         const depositAgents = depositAgentsSetting && depositAgentsSetting.settingValue ? JSON.parse(depositAgentsSetting.settingValue) : [];
 
         res.json({
@@ -27,10 +27,10 @@ exports.updatePaymentSettings = async (req, res) => {
         const { bkash_number, bank_details } = req.body;
 
         if (bkash_number) {
-            await GameSetting.upsert({ settingName: 'bkash_number', settingValue: bkash_number, description: 'Admin Bkash Number' });
+            await Setting.upsert({ settingName: 'bkash_number', settingValue: bkash_number, description: 'Admin Bkash Number' });
         }
         if (bank_details) {
-            await GameSetting.upsert({ settingName: 'bank_details', settingValue: bank_details, description: 'Bank Account Details' });
+            await Setting.upsert({ settingName: 'bank_details', settingValue: bank_details, description: 'Bank Account Details' });
         }
 
         // Update Agent/Deposit Numbers List
@@ -40,7 +40,7 @@ exports.updatePaymentSettings = async (req, res) => {
             if (typeof agentsValue === 'object') {
                 agentsValue = JSON.stringify(agentsValue);
             }
-            await GameSetting.upsert({
+            await Setting.upsert({
                 settingName: 'deposit_agents',
                 settingValue: agentsValue,
                 description: 'List of Agent Numbers for Deposit'

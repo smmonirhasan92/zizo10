@@ -29,6 +29,12 @@ export default function LoginPage() {
                 router.push('/dashboard');
             }
         } catch (err) {
+            // Strict Activation Gateway Logic
+            if (err.response?.status === 403 && err.response?.data?.code === 'ACCOUNT_PENDING') {
+                router.push('/activation-required');
+                return;
+            }
+
             setError(err.response?.data?.message || 'Login failed');
             setLoading(false);
         }

@@ -14,6 +14,10 @@ export default function TaskCenterPage() {
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState('');
 
+    // Lock Screen State
+    const [canWork, setCanWork] = useState(true);
+    const [lockMessage, setLockMessage] = useState('');
+
     useEffect(() => {
         fetchTasks();
     }, []);
@@ -21,7 +25,14 @@ export default function TaskCenterPage() {
     const fetchTasks = async () => {
         try {
             const res = await api.get('/task/status');
-            // Backend sends { adTasks: [], reviewTasks: [] }
+            // Backend sends { adTasks: [], reviewTasks: [], canWork: true/false, message: '' }
+
+            if (res.data.canWork === false) {
+                setCanWork(false);
+                setLockMessage(res.data.message);
+                return; // Stop loading tasks if locked
+            }
+
             setAdTasks(res.data.adTasks || []);
             setReviewTasks(res.data.reviewTasks || []);
         } catch (err) {
@@ -70,7 +81,23 @@ export default function TaskCenterPage() {
         alert(`Opened Ad: ${ad.title}. Reward added (Simulated).`);
     };
 
-    if (loading) return <div className="p-10 text-center text-white">Loading Tasks...</div>;
+    if (loading) return <div className="p-10 text-center text-white flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div></div>;
+
+    if (!canWork) {
+        return (
+            <div className="min-h-screen bg-slate-900 pb-24 p-6 flex flex-col items-center justify-center text-center">
+                <div className="w-24 h-24 bg-slate-800 rounded-full flex items-center justify-center mb-6 shadow-2xl shadow-black/50 border border-slate-700">
+                    <ShoppingBag className="w-10 h-10 text-slate-500" />
+                </div>
+                <h1 className="text-2xl font-bold text-white mb-2">Access Locked</h1>
+                <p className="text-slate-400 mb-8 max-w-xs mx-auto">{lockMessage || "You need an active plan to access these tasks."}</p>
+
+                <a href="/plans" className="w-full max-w-sm py-4 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl font-bold text-slate-900 shadow-lg shadow-amber-500/20 hover:scale-105 transition-transform">
+                    View VIP Plans
+                </a>
+            </div>
+        )
+    }
 
     return (
         <div className="min-h-screen bg-slate-900 pb-24 p-4">
@@ -97,10 +124,14 @@ export default function TaskCenterPage() {
             </header>
 
             {message && (
-                <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 rounded-xl animate-in zoom-in">
+                <div className={`mb-6 p-4 rounded-xl animate-in zoom-in border ${message.includes('Error') ? 'bg-red-500/10 border-red-500/20 text-red-200' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-200'}`}>
                     {message}
                 </div>
             )}
+
+            {/* --- SMART LOCK SCREEN --- */}
+            {/* If backend says canWork: false (we need to capture this state) */}
+            {/* Since I didn't update state yet, I will do it in next step. For now, let's assume if both empty and message says so. */}
 
             {/* --- TAB: SMART REVIEWS (NEW) --- */}
             {activeTab === 'review' && (
@@ -125,16 +156,16 @@ export default function TaskCenterPage() {
                                     <div className="w-20 h-20 rounded-xl bg-slate-700 shrink-0 overflow-hidden">
                                         <img src={task.productImage} alt={task.productName} className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-bold text-white mb-1 leading-tight">{task.productName}</h3>
-                                        <p className="text-xs text-slate-400 line-clamp-3">{task.reviewText}</p>
+                                    <div className="flex-1 min-w-0"> {/* min-w-0 fixes flex overflow */}
+                                        <h3 className="font-bold text-white mb-1 leading-tight truncate">{task.productName}</h3>
+                                        <p className="text-xs text-slate-400 line-clamp-3 break-words">{task.reviewText}</p>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="fixed bottom-20 left-4 right-4 md:left-64 md:right-10">
+                    <div className="fixed bottom-24 left-4 right-4 md:left-64 md:right-10 z-40"> {/* Adjusted bottom */}
                         <button
                             onClick={handleApplyReviews}
                             disabled={selectedTasks.length < 5 || submitting}
@@ -146,24 +177,24 @@ export default function TaskCenterPage() {
                 </div>
             )}
 
-            {/* --- TAB: VIDEO ADS (OLD/RESTORED) --- */}
+            {/* --- TAB: VIDEO ADS --- */}
             {activeTab === 'ad' && (
-                <div className="animate-in fade-in slide-in-from-left-4 space-y-4">
+                <div className="animate-in fade-in slide-in-from-left-4 space-y-4 pb-20">
                     {adTasks.length === 0 ? (
                         <div className="text-center py-20 text-slate-500">No Video Ads Available Today.</div>
                     ) : (
                         adTasks.map(ad => (
                             <div key={ad.id} className="bg-[#121620] p-4 rounded-2xl border border-white/5 flex gap-4 items-center group hover:border-blue-500/30 transition-all">
-                                <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                                <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform shrink-0">
                                     <PlayCircle className="w-6 h-6" />
                                 </div>
-                                <div className="flex-1">
-                                    <h3 className="font-bold text-white">{ad.title}</h3>
-                                    <p className="text-xs text-slate-400">{ad.reviewText || 'Watch video to earn reward'}</p>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-bold text-white truncate">{ad.title}</h3>
+                                    <p className="text-xs text-slate-400 truncate">{ad.reviewText || 'Watch video to earn reward'}</p>
                                 </div>
                                 <button
                                     onClick={() => handleWatchAd(ad)}
-                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold text-white transition-colors"
+                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold text-white transition-colors whitespace-nowrap"
                                 >
                                     Watch & Earn
                                 </button>

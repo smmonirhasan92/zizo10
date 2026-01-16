@@ -64,14 +64,17 @@ function WorkContent() {
         setIsActive(true);
     };
 
+    const [showCoin, setShowCoin] = useState(false);
+
     const handleClaim = async () => {
         setLoading(true);
         try {
             const res = await api.post('/task/submit');
+            setShowCoin(true); // Trigger Animation
             showSuccess(`Reward Claimed: ${res.data.rewardEarned} BDT`);
             setTimeout(() => {
                 router.push('/tasks');
-            }, 1000);
+            }, 2500); // Wait for animation
         } catch (err) {
             showError(err.response?.data?.message || 'Task failed');
             setLoading(false);
@@ -83,7 +86,33 @@ function WorkContent() {
     const displayAd = adData || { title: 'Sponsored Task', description: 'Visit our partner to unlock reward.', imageUrl: '/uploads/placeholder.png', adLink: 'https://google.com' };
 
     return (
-        <div className="min-h-screen bg-black text-white p-6 flex flex-col items-center justify-center relative">
+        <div className="min-h-screen bg-black text-white p-6 flex flex-col items-center justify-center relative overflow-hidden">
+            {/* Golden Coin Animation Overlay */}
+            {showCoin && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-500">
+                    <div className="relative animate-bounce-custom">
+                        <div className="w-40 h-40 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-500 to-amber-600 shadow-[0_0_100px_rgba(234,179,8,0.6)] flex items-center justify-center border-4 border-yellow-200">
+                            <span className="text-6xl font-black text-yellow-100 drop-shadow-md">৳</span>
+                        </div>
+                        {/* Sparkles */}
+                        <div className="absolute -top-10 -right-10 w-4 h-4 bg-white rounded-full animate-ping"></div>
+                        <div className="absolute top-1/2 -left-12 w-3 h-3 bg-yellow-200 rounded-full animate-ping delay-100"></div>
+                        <div className="absolute -bottom-8 right-12 w-5 h-5 bg-amber-300 rounded-full animate-ping delay-200"></div>
+                    </div>
+                    <style jsx>{`
+                        @keyframes bounce-custom {
+                            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+                            50% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+                            70% { transform: scale(0.9) rotate(-10deg); }
+                            100% { transform: scale(1) rotate(0deg); }
+                        }
+                        .animate-bounce-custom {
+                            animation: bounce-custom 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                        }
+                    `}</style>
+                </div>
+            )}
+
             <Link href="/tasks" className="absolute top-6 left-6 p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition">
                 <ArrowLeft className="w-5 h-5" />
             </Link>
@@ -131,7 +160,7 @@ function WorkContent() {
                     ) : (
                         <button
                             onClick={handleClaim}
-                            disabled={loading}
+                            disabled={loading || showCoin}
                             className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-green-500/30 transition-all transform active:scale-95 animate-in fade-in zoom-in duration-300"
                         >
                             {loading ? 'Claiming...' : (

@@ -1,9 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import api from '@/services/api';
-import { CheckCircle, AlertTriangle, PlayCircle, Star, ShoppingBag, Video } from 'lucide-react';
+import { CheckCircle, AlertTriangle, PlayCircle, Star, ShoppingBag, Video, Timer, X, Maximize2 } from 'lucide-react';
+import { useNotification } from '@/context/NotificationContext';
 
 export default function TaskCenterPage() {
+    const { showSuccess, showError } = useNotification();
     const [adTasks, setAdTasks] = useState([]);
     const [reviewTasks, setReviewTasks] = useState([]);
 
@@ -18,6 +20,13 @@ export default function TaskCenterPage() {
     const [canWork, setCanWork] = useState(true);
     const [lockMessage, setLockMessage] = useState('');
 
+    // --- SMART MODAL STATE ---
+    const [showModal, setShowModal] = useState(false);
+    const [activeTask, setActiveTask] = useState(null); // The ad being watched
+    const [modalTimer, setModalTimer] = useState(10);
+    const [isClaimable, setIsClaimable] = useState(false);
+    const [showCoin, setShowCoin] = useState(false); // Coin Animation
+
     useEffect(() => {
         fetchTasks();
     }, []);
@@ -25,12 +34,10 @@ export default function TaskCenterPage() {
     const fetchTasks = async () => {
         try {
             const res = await api.get('/task/status');
-            // Backend sends { adTasks: [], reviewTasks: [], canWork: true/false, message: '' }
-
             if (res.data.canWork === false) {
                 setCanWork(false);
                 setLockMessage(res.data.message);
-                return; // Stop loading tasks if locked
+                return;
             }
 
             setAdTasks(res.data.adTasks || []);
@@ -41,6 +48,67 @@ export default function TaskCenterPage() {
             setLoading(false);
         }
     };
+
+    // --- Modal Logic ---
+    const openAdModal = (task) => {
+        setActiveTask(task);
+        setModalTimer(10);
+        setIsClaimable(false);
+        setShowModal(true);
+        setShowCoin(false);
+    };
+
+    const closeAdModal = () => {
+        if (!isClaimable && modalTimer > 0) return; // Prevent closing if timer running
+        setShowModal(false);
+        setActiveTask(null);
+    };
+
+    // Timer Effect
+    useEffect(() => {
+        let interval = null;
+        if (showModal && modalTimer > 0) {
+            interval = setInterval(() => {
+                setModalTimer((prev) => prev - 1);
+            }, 1000);
+        } else if (showModal && modalTimer === 0) {
+            setIsClaimable(true);
+        }
+        return () => clearInterval(interval);
+    }, [showModal, modalTimer]);
+
+
+    // --- Claim Logic (Inside Modal) ---
+    const handleClaimReward = async () => {
+        if (!activeTask) return;
+        setSubmitting(true);
+        try {
+            // Submit single task
+            const res = await api.post('/task/submit', { taskIds: [activeTask.id], type: 'ad' });
+
+            // Show Coin Animation
+            setShowCoin(true);
+            showSuccess(`Reward Claimed: ${res.data.rewardEarned || 'Success'} BDT`);
+
+            // Refresh tasks immediately to remove completed one or update list
+            fetchTasks();
+            // Ideally we should just filter it out locally to feel faster, but fetch ensures sync.
+            // Let's filter locally for instant feel? 
+            // Actually, keep it simple.
+
+            setTimeout(() => {
+                setShowModal(false);
+                setActiveTask(null);
+                setShowCoin(false);
+            }, 2500); // 2.5s Audio/Anim Duration
+
+        } catch (err) {
+            showError(err.response?.data?.message || 'Task failed');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
 
     // --- Review Task Logic ---
     const toggleReviewTask = (taskId) => {
@@ -62,7 +130,6 @@ export default function TaskCenterPage() {
         }
         setSubmitting(true);
         try {
-            // Placeholder: Review Task Submission logic
             await api.post('/task/submit', { taskIds: selectedTasks, type: 'review' });
             setMessage(`🎉 Reviews Submitted Successfully!`);
             setSelectedTasks([]);
@@ -73,24 +140,13 @@ export default function TaskCenterPage() {
         }
     };
 
-    // --- Ad Task Logic ---
-    // --- Ad Task Logic ---
-    const import_useRouter = require('next/navigation').useRouter; // Need router.
-    // Wait, I can't require in a function body like this in Next.js usually for hooks.
-    // I need to add useRouter to top level.
-    // Let me abort this specific chunk and do a full component update or see if router is available.
-    // Checking file content... `import { useState, useEffect } from 'react';`
-    // No router imported. I need to add `useRouter`.
-    // I will do in next steps. For now, let's just use window.location.href as fallback or better, add the hook.
 
-    // Actually, I can use a Link component or standard navigation. 
-    // Let's modify the function to redirect.
-
-    // I will simply replace the content with the logic, assuming I will add the hook import in another step.
-    const handleWatchAd = (ad) => {
-        // Navigate to Work Page for Embedded Viewing
-        window.location.href = `/tasks/work?task=1&adId=${ad.id}`;
+    // --- Helper to determine Content Type ---
+    const isImageLink = (url) => {
+        if (!url) return false;
+        return url.match(/\.(jpeg|jpg|gif|png|webp)$/) != null;
     };
+
 
     if (loading) return <div className="p-10 text-center text-white flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div></div>;
 
@@ -111,7 +167,7 @@ export default function TaskCenterPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-900 pb-24 p-4">
+        <div className="min-h-screen bg-slate-900 pb-24 p-4 relative">
             <header className="mb-6">
                 <h1 className="text-2xl font-bold text-white mb-4">Task Center</h1>
 
@@ -140,11 +196,8 @@ export default function TaskCenterPage() {
                 </div>
             )}
 
-            {/* --- SMART LOCK SCREEN --- */}
-            {/* If backend says canWork: false (we need to capture this state) */}
-            {/* Since I didn't update state yet, I will do it in next step. For now, let's assume if both empty and message says so. */}
 
-            {/* --- TAB: SMART REVIEWS (NEW) --- */}
+            {/* --- TAB: SMART REVIEWS --- */}
             {activeTab === 'review' && (
                 <div className="animate-in fade-in slide-in-from-right-4">
                     <div className="flex justify-between items-center mb-4">
@@ -176,7 +229,7 @@ export default function TaskCenterPage() {
                         ))}
                     </div>
 
-                    <div className="fixed bottom-24 left-4 right-4 md:left-64 md:right-10 z-40"> {/* Adjusted bottom */}
+                    <div className="fixed bottom-24 left-4 right-4 md:left-64 md:right-10 z-40">
                         <button
                             onClick={handleApplyReviews}
                             disabled={selectedTasks.length < 5 || submitting}
@@ -188,7 +241,7 @@ export default function TaskCenterPage() {
                 </div>
             )}
 
-            {/* --- TAB: VIDEO ADS --- */}
+            {/* --- TAB: VIDEO ADS (MODAL TRIGGER) --- */}
             {activeTab === 'ad' && (
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 pb-20 animate-in fade-in slide-in-from-left-4">
                     {adTasks.length === 0 ? (
@@ -205,7 +258,7 @@ export default function TaskCenterPage() {
                                     <p className="text-[10px] md:text-xs text-slate-400 truncate w-full">{ad.reviewText || 'Watch to earn'}</p>
                                 </div>
                                 <button
-                                    onClick={() => handleWatchAd(ad)}
+                                    onClick={() => openAdModal(ad)}
                                     className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-[10px] md:text-xs font-bold text-white transition-colors"
                                 >
                                     Watch & Earn
@@ -213,6 +266,69 @@ export default function TaskCenterPage() {
                             </div>
                         ))
                     )}
+                </div>
+            )}
+
+            {/* --- SMART AD MODAL --- */}
+            {showModal && activeTask && (
+                <div className="fixed inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-xl animate-in zoom-in-95 duration-200">
+
+                    {/* Header: Timer & Status */}
+                    <div className="flex justify-between items-center p-4 border-b border-white/10 bg-black/40">
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-white font-bold truncate max-w-[200px]">{activeTask.title}</h2>
+                        </div>
+                        <div className={`px-4 py-1.5 rounded-full font-mono font-bold text-sm flex items-center gap-2 border ${isClaimable ? 'bg-green-500/20 text-green-400 border-green-500/50' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50'}`}>
+                            <Timer className="w-4 h-4" />
+                            {isClaimable ? 'Ready!' : `${modalTimer}s`}
+                        </div>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="flex-1 relative w-full h-full flex items-center justify-center overflow-hidden bg-black">
+                        {showCoin && (
+                            <div className="absolute inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in">
+                                <div className="text-center animate-bounce-custom">
+                                    <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-yellow-300 via-yellow-500 to-amber-600 shadow-[0_0_80px_rgba(234,179,8,0.5)] flex items-center justify-center border-4 border-yellow-200">
+                                        <span className="text-5xl font-black text-yellow-100">৳</span>
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-yellow-400 mt-6">Claimed!</h2>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Rendering Logic: Image vs Iframe */}
+                        {isImageLink(activeTask.adLink) ? (
+                            <img src={activeTask.adLink} alt="Ad Content" className="max-w-full max-h-full object-contain" />
+                        ) : (
+                            <iframe
+                                src={activeTask.adLink}
+                                title="Ad Frame"
+                                className="w-full h-full border-0 bg-white"
+                                sandbox="allow-scripts allow-same-origin allow-presentation"
+                            />
+                        )}
+                    </div>
+
+                    {/* Footer: Controls */}
+                    <div className="p-4 border-t border-white/10 bg-black/40 pb-10 md:pb-4">
+                        {!isClaimable ? (
+                            <button disabled className="w-full py-4 bg-slate-800 text-slate-500 rounded-xl font-bold flex items-center justify-center gap-2 cursor-wait">
+                                <Timer className="w-5 h-5 animate-spin-slow" />
+                                Wait {modalTimer}s to Claim
+                            </button>
+                        ) : (
+                            <div className="flex gap-3">
+                                <button onClick={closeAdModal} className="px-6 py-4 bg-slate-700 text-white rounded-xl font-bold hover:bg-slate-600 transition-colors">
+                                    <X className="w-5 h-5" />
+                                </button>
+                                <button onClick={handleClaimReward} disabled={submitting} className="flex-1 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-green-500/20 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
+                                    <CheckCircle className="w-5 h-5" />
+                                    Claim Reward
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
         </div>

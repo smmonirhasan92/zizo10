@@ -77,7 +77,7 @@ export default function GlobalSearch() {
                                     <span className="text-xs normal-case text-indigo-500 cursor-pointer">View All</span>
                                 </h4>
                                 {results.users.map(user => (
-                                    <Link href={`/admin/user/${user.id}`} key={user.id} onClick={() => setOpen(false)} className="flex items-center gap-3 p-3 border-b border-slate-50 hover:bg-slate-50 transition cursor-pointer group">
+                                    <Link href={`/admin/user-profile?id=${user.id}`} key={user.id} onClick={() => setOpen(false)} className="flex items-center gap-3 p-3 border-b border-slate-50 hover:bg-slate-50 transition cursor-pointer group">
                                         <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm ${user.role === 'agent' ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-indigo-500 to-purple-600'}`}>
                                             {user.fullName.charAt(0)}
                                         </div>

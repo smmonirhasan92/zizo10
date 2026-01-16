@@ -1,13 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import api from '../../../../services/api'; // Correct path to services/api
 import { ArrowLeft, Save, Lock, Unlock, ShieldAlert, Award, AlertTriangle, Activity } from 'lucide-react';
 
 export default function UserProfileClient() {
-    const params = useParams();
+    const searchParams = useSearchParams();
     const router = useRouter();
-    const { id } = params;
+    const id = searchParams.get('id');
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);

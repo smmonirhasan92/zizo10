@@ -104,8 +104,9 @@ export default function AdminRequestsPage() {
                                             cleanPath = cleanPath.replace(/^api\//, '').replace(/^backend\//, '');
                                             if (cleanPath.startsWith('/')) cleanPath = cleanPath.substring(1);
 
-                                            // Final URL (Assumes served from http://localhost:5000/uploads/...)
-                                            const imgUrl = `http://localhost:5000/${cleanPath}`;
+                                            // Final URL (Assumes served from base url/uploads/...)
+                                            const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
+                                            const imgUrl = `${apiBase}/${cleanPath}`;
 
                                             return (
                                                 <>

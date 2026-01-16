@@ -58,7 +58,8 @@ export default function TransactionCard({
                             cleanPath = cleanPath.replace(/^api\//, '').replace(/^backend\//, '');
                             if (cleanPath.startsWith('/')) cleanPath = cleanPath.substring(1);
 
-                            const imgUrl = `http://localhost:5000/${cleanPath}`;
+                            const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
+                            const imgUrl = `${apiBase}/${cleanPath}`;
 
                             return (
                                 <>

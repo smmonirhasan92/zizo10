@@ -47,7 +47,10 @@ const withPWA = withPWAInit({
   },
 });
 
-const nextConfig = {
+const nextConfig: import('next').NextConfig = {
+  env: {
+    NEXT_PUBLIC_API_URL: '/api', // Dynamic for production
+  },
   /* config options here */
   output: 'export', // Enabled for Static Export
   images: {

@@ -7,7 +7,7 @@ import BottomNav from '../../components/BottomNav';
 import ImageSlider from '../../components/ImageSlider';
 import Loading from '../../components/Loading'; // Custom Skeleton
 import NotificationBell from '../../components/ui/NotificationBell'; // Step 7
-import { Bell, Zap, Send, Smartphone, Plus, Gamepad2, Headset, Wallet, ArrowRight, User, History, CheckCircle, TrendingUp, DollarSign, ArrowDownLeft, ChevronUp, ChevronDown, Share2 } from 'lucide-react';
+import { Bell, Zap, Send, Smartphone, Plus, Gamepad2, Headset, Wallet, ArrowRight, User, History, CheckCircle, TrendingUp, DollarSign, ArrowDownLeft, ChevronUp, ChevronDown, Share2, Home, Crown, ChevronRight, Download } from 'lucide-react';
 
 export default function DashboardPage() {
     const [user, setUser] = useState(null);
@@ -100,6 +100,30 @@ export default function DashboardPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Navigation Menu (Restored) */}
+                    <nav className="space-y-2">
+                        <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 bg-[#1A1F2B] text-white rounded-xl border border-white/5 font-bold shadow-lg">
+                            <Home className="w-5 h-5 text-indigo-400" />
+                            <span>Dashboard</span>
+                        </Link>
+                        <Link href="/plans" className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all font-medium">
+                            <Crown className="w-5 h-5 text-yellow-500" />
+                            <span>VIP Plans</span>
+                        </Link>
+                        <Link href="/tasks" className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all font-medium">
+                            <CheckCircle className="w-5 h-5 text-blue-500" />
+                            <span>Task Center</span>
+                        </Link>
+                        <Link href="/history" className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all font-medium">
+                            <History className="w-5 h-5 text-amber-500" />
+                            <span>Transactions</span>
+                        </Link>
+                        <button onClick={() => window.dispatchEvent(new Event('pwa-install-trigger'))} className="flex w-full items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all font-medium text-left">
+                            <Download className="w-5 h-5 text-emerald-500" />
+                            <span>Install App</span>
+                        </button>
+                    </nav>
                 </div>
             </aside>
 
@@ -212,8 +236,6 @@ export default function DashboardPage() {
                         </Link>
                     </div>
 
-
-
                     {/* 4. Task Center (List View Cards) */}
                     <div className="px-5 mt-8">
                         <div className="flex justify-between items-end mb-4 px-1">
@@ -277,10 +299,4 @@ export default function DashboardPage() {
     );
 }
 
-function ChevronRight({ className }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <path d="m9 18 6-6-6-6" />
-        </svg>
-    )
-}
+

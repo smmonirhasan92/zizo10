@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { Home, CreditCard, Send, Gamepad2, Settings, Headset } from 'lucide-react';
+import { Home, CreditCard, Send, Gamepad2, Settings, Headset, Crown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function BottomNav() {
@@ -8,6 +8,7 @@ export default function BottomNav() {
 
     const navItems = [
         { name: 'Home', href: '/dashboard', icon: Home },
+        { name: 'Plans', href: '/plans', icon: Crown }, // Restored
         { name: 'Recharge', href: '/wallet/recharge', icon: CreditCard },
         { name: 'Send', href: '/wallet/send', icon: Send },
         { name: 'Support', href: '/support', icon: Headset },

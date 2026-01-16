@@ -45,6 +45,7 @@ export const viewport = {
 }
 
 import { NotificationProvider } from '../context/NotificationContext';
+import PWAInstallPrompt from '../components/PWAInstallPrompt';
 
 export default function RootLayout({ children }) {
     return (
@@ -55,6 +56,7 @@ export default function RootLayout({ children }) {
                         <main className="flex-1 overflow-y-auto no-scrollbar pb-20">
                             {children}
                         </main>
+                        <PWAInstallPrompt />
                     </div>
                 </NotificationProvider>
             </body>

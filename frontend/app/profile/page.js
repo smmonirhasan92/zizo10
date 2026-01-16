@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api'; // Correct path to services/api
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Camera, Save, User } from 'lucide-react';
+import { ArrowLeft, Camera, Save, User, Download } from 'lucide-react';
 
 export default function ProfilePage() {
     const [user, setUser] = useState(null);
@@ -159,6 +159,14 @@ export default function ProfilePage() {
                         className="w-full py-4 bg-pink-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-pink-200 hover:bg-pink-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                     >
                         {loading ? 'Updating...' : <><Save className="w-5 h-5" /> Update Profile</>}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => window.dispatchEvent(new Event('pwa-install-trigger'))}
+                        className="w-full py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm border border-slate-700 hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+                    >
+                        <Download className="w-4 h-4" /> Install App
                     </button>
 
                     {message && (

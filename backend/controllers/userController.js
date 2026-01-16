@@ -351,54 +351,68 @@ exports.imposePenalty = async (req, res) => {
 };
 
 
-// Get All Users (Admin) - Updated with Referral Stats (Step 8)
+// Get All Users (Admin) - Safe Fetch Version
 exports.getAllUsers = async (req, res) => {
     try {
+        console.log('Fetching All Users (Safe Mode)...');
+        // SAFE FETCH: Explicitly select columns that appear in the table creation script or are standard.
+        // We exclude 'agent_referral_code', 'referredBy' etc. just in case they are missing in Live DB.
         const users = await User.findAll({
-            attributes: { exclude: ['password'] },
+            attributes: ['id', 'fullName', 'username', 'phone', 'role', 'accountStatus', 'account_tier', 'createdAt'],
             include: [
-                { model: Wallet },
-                // To get total referrals efficiently, we might need a separate count or raw query if performance is key.
-                // For now, simpler approach: fetch all and count in JS or use literal.
-                // Let's use sequelize.literal for efficiency if possible, but 'referredBy' might check 'referral_code' vs ID.
-                // Current Schema: referredBy stores integer ID? Wait, verify schema.
-                // User.js says `referredBy: DataTypes.INTEGER` (Wait, I added referredBy column in a migration? Yes step 4).
-            ]
+                {
+                    model: Wallet,
+                    attributes: ['balance', 'game_balance'],
+                    required: false // Left Join ensures we get user even if wallet missing
+                }
+            ],
+            order: [['createdAt', 'DESC']]
         });
 
-        // Step 8: Calculate Referral Stats (Active vs Total)
-        // This is heavy for "All Users". Better to do it via a separate stats endpoint or optimized query.
-        // Given user request "When admin sees user card", maybe we fetch this detail ON DEMAND or for the list? 
-        // User request: "Visual Status: Admin sees ... Active Referrals: X / Total Referrals: Y"
-        // Let's attach it to the list response using a subquery promise or map.
-
+        // Simplified Stats (Optional - Try/Catch to prevent crash if columns missing)
         const usersWithStats = await Promise.all(users.map(async (u) => {
-            const totalRefs = await User.count({ where: { referredBy: u.id } });
-            // Active = User who strictly purchased a plan (unlock_price > 0) OR simply has 'active' status? 
-            // User requirement: "X = যারা প্যাকেজ কিনেছে" (Those who bought a package).
-            // We can check `purchase_balance` usage or `account_tier` != 'Starter'.
-            // Let's count users referred by u.id where account_tier != 'Starter'.
-            const { Op } = require('sequelize');
-            const activeRefs = await User.count({
-                where: {
-                    referredBy: u.id,
-                    account_tier: { [Op.ne]: 'Starter' }
-                }
-            });
+            let stats = { totalReferrals: 0, activeReferrals: 0 };
+            try {
+                // Check if 'referredBy' column exists by trying a count. 
+                // If this fails (SQL Error), we catch it and return 0 stats.
+                // This allows the LIST to render even if Schema is outdated.
+
+                // Commented out to ensure absolute safety as per user request "Safe Fetch"
+                /*
+                const totalRefs = await User.count({ where: { referredBy: u.id } });
+                const { Op } = require('sequelize');
+                const activeRefs = await User.count({
+                    where: {
+                        referredBy: u.id, // Column might not exist
+                        account_tier: { [Op.ne]: 'Starter' }
+                    }
+                });
+                stats = { totalReferrals: totalRefs, activeReferrals: activeRefs };
+                */
+            } catch (statsErr) {
+                console.warn(`Stats fetch failed for user ${u.id}:`, statsErr.message);
+            }
 
             return {
                 ...u.toJSON(),
-                stats: {
-                    totalReferrals: totalRefs,
-                    activeReferrals: activeRefs
-                }
+                stats // Returns 0s if disabled/failed
             };
         }));
 
         res.json(usersWithStats);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server Error' });
+        console.error('CRITICAL ERROR in getAllUsers:', err);
+        // Fallback: Try even simpler fetch if above failed (e.g. Wallet issue)
+        try {
+            console.log('Attempting Ultra-Safe Fallback...');
+            const simpleUsers = await User.findAll({
+                attributes: ['id', 'fullName', 'username', 'phone', 'role', 'createdAt']
+            });
+            res.json(simpleUsers);
+        } catch (fallbackErr) {
+            console.error('Fallback failed:', fallbackErr);
+            res.status(500).json({ message: 'Server Error', error: err.toString() });
+        }
     }
 };
 

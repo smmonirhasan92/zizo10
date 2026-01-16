@@ -60,6 +60,50 @@ exports.getTasks = async (req, res) => {
         const user = req.user.user;
         const { TaskProduct, TaskAd } = require('../models');
 
+        // --- SMART PLAN CONTROL START ---
+        // 1. Check if Plan is Valid
+        const validPlans = ['VIP', 'Premium', 'Gold', 'Diamond']; // Add all valid paid plans here
+        // If user is 'Starter' or 'Free', they cannot work (unless we allow free tasks?)
+        // Requirement: "User cannot work without plan"
+        // Let's assume 'Starter' is the default/no-plan state.
+
+        let canWork = true;
+        let message = '';
+        let dailyLimit = 5; // Default fallback
+
+        if (!user.account_tier || user.account_tier === 'Starter') {
+            // --- SELF HEALING LOGIC ---
+            // Check if user actually has an active plan in the database
+            const activePlan = await UserPlan.findOne({
+                where: { userId: user.id, status: 'active' },
+                order: [['createdAt', 'DESC']]
+            });
+
+            if (activePlan) {
+                console.log(`[Self-Healing] Fixed Tier Mismatch for ${user.username}: Starter -> ${activePlan.planName}`);
+                user.account_tier = activePlan.planName;
+                await user.save(); // Persist the fix
+                canWork = true;
+            } else {
+                canWork = false;
+                message = "You must purchase a VIP Plan to unlock tasks.";
+            }
+        }
+
+        // 2. Fetch Plan Details to get Daily Limit (if we had a Plan model loaded, better. For now hardcode or use simple logic)
+        // Ideally we should query the Plan model. Let's do a quick lookup if possible, or proceed with basic logic.
+        // Assuming 'Starter' is blocked.
+
+        if (!canWork) {
+            return res.json({
+                canWork: false,
+                message: message,
+                adTasks: [],
+                reviewTasks: []
+            });
+        }
+        // --- SMART PLAN CONTROL END ---
+
         // 1. Fetch Old System Ads
         const adTasks = await TaskAd.findAll({
             where: { status: 'active' },
@@ -89,6 +133,8 @@ exports.getTasks = async (req, res) => {
         // To enable: Uncomment the where clause above.
 
         res.json({
+            canWork: true, // Explicitly send true
+            dailyLimit: dailyLimit, // Send limit for frontend UI
             adTasks: adTasks,
             reviewTasks: reviewTasks
         });
@@ -114,24 +160,67 @@ exports.submitTask = async (req, res) => {
 
         const user = await User.findByPk(userId, { transaction: t });
 
+        const { Op } = require('sequelize');
+
+        // 1. Filter out duplicates (Anti-Cheat)
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const validTaskIds = [];
+        for (const tid of taskIds) {
+            const exists = await TaskLog.count({
+                where: {
+                    userId,
+                    taskId: tid, // Assuming taskId maps to generic task ID or specific ad/product ID.
+                    // Ideally TaskLog should have 'taskType' to distinguish. 
+                    // For now, we assume simple ID mapping or we treat all as 'task'.
+                    // Let's rely on the submitted 'type' to valid differentiation if needed.
+                    createdAt: { [Op.gte]: startOfDay }
+                },
+                transaction: t
+            });
+            if (exists === 0) {
+                validTaskIds.push(tid);
+            }
+        }
+
+        if (validTaskIds.length === 0) {
+            await t.rollback();
+            return res.status(200).json({ message: 'All tasks already completed today.', newBalance: (await User.findByPk(userId)).income_balance });
+            // Return 200 to avoid frontend error, just no reward.
+            // Actually, let's just return current balance.
+            // Need to fetch wallet balance to be safe or just return 0 diff.
+        }
+
         // Reward Logic: Check Plan, Calculate Amount
         // TODO: Fetch Dynamic Reward from Schedule/Plan
         let rewardPerTask = 2.00;
         if (type === 'ad') rewardPerTask = 5.00; // Higher for ads? Example.
 
-        const totalReward = taskIds.length * rewardPerTask;
+        const totalReward = validTaskIds.length * rewardPerTask;
 
         // Update Wallet
         const wallet = await Wallet.findOne({ where: { userId } }, { transaction: t });
         wallet.balance = parseFloat(wallet.balance) + totalReward;
         await wallet.save({ transaction: t });
 
+        // Create TaskLogs (Critical for History & Anti-Cheat)
+        for (const tid of validTaskIds) {
+            await TaskLog.create({
+                userId,
+                taskId: tid,
+                status: 'completed',
+                reward: rewardPerTask,
+                type: type || 'daily_task'
+            }, { transaction: t });
+        }
+
         // Log Transaction
         await require('../models').Transaction.create({
             userId,
             type: 'task_income',
             amount: totalReward,
-            description: `Completed ${taskIds.length} ${type === 'ad' ? 'Ads' : 'Start Review Tasks'}`,
+            description: `Completed ${validTaskIds.length} ${type === 'ad' ? 'Ads' : 'Start Review Tasks'}`,
             status: 'completed'
         }, { transaction: t });
 

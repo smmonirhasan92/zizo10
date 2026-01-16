@@ -80,7 +80,10 @@ app.use('/api/withdrawal', withdrawalRoutes); // Withdrawal Routes
 app.use('/api/agent', agentRoutes); // Agent Routes
 
 // Sync Database and Start Server
-sequelize.sync({ alter: true }) // Enabled for Schema Updates
+// Sync Database and Start Server
+// DISABLE alter: true for production to prevent startup timeouts on large tables.
+// Use 'node backend/scripts/migrate_tasklog_schema.js' for schema updates.
+sequelize.sync({ alter: false })
     .then(() => {
         console.log('Database connected and synced!');
         app.listen(PORT, () => {

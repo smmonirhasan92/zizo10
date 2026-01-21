@@ -1,4 +1,6 @@
 'use client';
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import api from '@/services/api';
 import { CheckCircle, AlertTriangle, PlayCircle, Star, ShoppingBag, Video, Timer, X, Maximize2 } from 'lucide-react';
@@ -33,7 +35,7 @@ export default function TaskCenterPage() {
 
     const fetchTasks = async () => {
         try {
-            const res = await api.get('/task/status');
+            const res = await api.get(`/task/status?t=${new Date().getTime()}`);
             if (res.data.canWork === false) {
                 setCanWork(false);
                 setLockMessage(res.data.message);

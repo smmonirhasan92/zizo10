@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Allow access to existing files and directories
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Redirect all other requests to the Node.js app runner (server.js/index.js)
+  # This usually relies on the Passenger/cPanel Node.js selector.
+  # But for API specifically, if it's a subdomain or folder:
+  
+  RewriteRule ^api/(.*)$ http://127.0.0.1:5000/api/$1 [P,L]
+  
+  # Ensure Authorization header is passed
+  RewriteCond %{HTTP:Authorization} .
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>

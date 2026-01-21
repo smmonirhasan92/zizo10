@@ -41,7 +41,14 @@ const TaskLog = sequelize.define('TaskLog', {
         defaultValue: 0.00
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        { fields: ['userId'] },
+        { fields: ['date'] },
+        { fields: ['taskId'] }, // Faster duplicate checks
+        { fields: ['type'] },   // Faster filtering by type
+        { fields: ['userId', 'date'] } // Faster daily check combinations
+    ]
 });
 
 module.exports = TaskLog;

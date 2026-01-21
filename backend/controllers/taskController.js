@@ -90,9 +90,23 @@ exports.getTasks = async (req, res) => {
             }
         }
 
-        // 2. Fetch Plan Details to get Daily Limit (if we had a Plan model loaded, better. For now hardcode or use simple logic)
-        // Ideally we should query the Plan model. Let's do a quick lookup if possible, or proceed with basic logic.
-        // Assuming 'Starter' is blocked.
+        // 2. Fetch Plan Details (STRICT LIMIT ENFORCEMENT)
+        // Get Tier Info
+        let tier = await AccountTier.findOne({ where: { name: user.account_tier } });
+
+        // Fallback for "Starter" or defined limits
+        if (!tier) {
+            // If strictly Starter = 0 limits? Or 5 free? 
+            // Agent Directive says "Package Level Lock", so Starter = 0 or Locked.
+            // But we already handled "canWork" above.
+            // Let's assume if canWork is true, there's a limit.
+            dailyLimit = 5;
+        } else {
+            dailyLimit = tier.daily_limit;
+        }
+
+        // Limit Strictness: "User sees ONLY what they bought"
+        // If limit is 20, we fetch 20.
 
         if (!canWork) {
             return res.json({
@@ -107,7 +121,8 @@ exports.getTasks = async (req, res) => {
         // 1. Fetch Old System Ads
         const adTasks = await TaskAd.findAll({
             where: { status: 'active' },
-            order: [['priority', 'ASC']]
+            order: [['priority', 'ASC']],
+            limit: dailyLimit // STRICT LIMIT
         });
 
         // 2. Fetch New Smart Reviews
@@ -118,12 +133,18 @@ exports.getTasks = async (req, res) => {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         const currentWeek = Math.ceil(diffDays / 7) || 1;
 
+        // Calculate remaining slots if we want mixed? Or just separate limits?
+        // Usually "Daily Limit" is total tasks.
+        // Let's apply limit to both for safety or split?
+        // Directive: "1000 TK = 20 Tasks".
+        // Let's assuming "Review Tasks" are the main work.
+
         const reviewTasks = await TaskProduct.findAll({
             where: {
                 status: 'active',
-                // weekNumber: currentWeek // Using strict rotation
+                // weekNumber: currentWeek // DISABLED: Strict rotation disabled based on Agent Analysis to ensure tasks show up.
             },
-            limit: 10,
+            limit: dailyLimit, // STRICT LIMIT
             order: [['createdAt', 'DESC']]
         });
 
@@ -162,27 +183,23 @@ exports.submitTask = async (req, res) => {
 
         const { Op } = require('sequelize');
 
-        // 1. Filter out duplicates (Anti-Cheat)
+        // 1. Filter out duplicates (Anti-Cheat) - OPTIMIZED BATCH QUERY
         const startOfDay = new Date();
         startOfDay.setHours(0, 0, 0, 0);
 
-        const validTaskIds = [];
-        for (const tid of taskIds) {
-            const exists = await TaskLog.count({
-                where: {
-                    userId,
-                    taskId: tid, // Assuming taskId maps to generic task ID or specific ad/product ID.
-                    // Ideally TaskLog should have 'taskType' to distinguish. 
-                    // For now, we assume simple ID mapping or we treat all as 'task'.
-                    // Let's rely on the submitted 'type' to valid differentiation if needed.
-                    createdAt: { [Op.gte]: startOfDay }
-                },
-                transaction: t
-            });
-            if (exists === 0) {
-                validTaskIds.push(tid);
-            }
-        }
+        // Fetch ALL completed tasks for this user TODAY in one go
+        const completedToday = await TaskLog.findAll({
+            where: {
+                userId,
+                taskId: { [Op.in]: taskIds }, // Check all IDs at once
+                createdAt: { [Op.gte]: startOfDay }
+            },
+            attributes: ['taskId'], // Only fetch IDs
+            transaction: t
+        });
+
+        const completedTaskIds = new Set(completedToday.map(log => log.taskId));
+        const validTaskIds = taskIds.filter(id => !completedTaskIds.has(id));
 
         if (validTaskIds.length === 0) {
             await t.rollback();

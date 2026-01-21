@@ -80,16 +80,21 @@ app.use('/api/withdrawal', withdrawalRoutes); // Withdrawal Routes
 app.use('/api/agent', agentRoutes); // Agent Routes
 
 // Sync Database and Start Server
-// Sync Database and Start Server
-// DISABLE alter: true for production to prevent startup timeouts on large tables.
-// Use 'node backend/scripts/migrate_tasklog_schema.js' for schema updates.
-sequelize.sync({ alter: false })
+// START SERVER IMMEDIATELY (Prevent 503 on DB Fail)
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`[DIAGNOSTIC] http://localhost:${PORT}`);
+});
+
+// Database Connection & Sync
+sequelize.authenticate()
     .then(() => {
-        console.log('Database connected and synced!');
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
+        console.log('✅ Database connected.');
+        return sequelize.sync({ alter: false });
+    })
+    .then(() => {
+        console.log('✅ Database synced.');
     })
     .catch((err) => {
-        console.error('Database connection failed:', err);
+        console.error('❌ Database connection failed:', err);
     });

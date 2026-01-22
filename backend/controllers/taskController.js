@@ -57,14 +57,18 @@ exports.getAllTasks = async (req, res) => {
 // Get User Tasks (Combined: Ads + Reviews)
 exports.getTasks = async (req, res) => {
     try {
-        const user = req.user.user;
+        // FIX: Fetch REAL User Instance (req.user.user is just a JWT JSON object)
+        const dbUser = await User.findByPk(req.user.user.id);
+
+        if (!dbUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const user = dbUser; // Use dbUser instance for valid .save() methods
 
         // --- SMART PLAN CONTROL START ---
         // 1. Check if Plan is Valid
-        const validPlans = ['VIP', 'Premium', 'Gold', 'Diamond']; // Add all valid paid plans here
-        // If user is 'Starter' or 'Free', they cannot work (unless we allow free tasks?)
-        // Requirement: "User cannot work without plan"
-        // Let's assume 'Starter' is the default/no-plan state.
+        const validPlans = ['VIP', 'Premium', 'Gold', 'Diamond'];
 
         let canWork = true;
         let message = '';
@@ -81,7 +85,7 @@ exports.getTasks = async (req, res) => {
             if (activePlan) {
                 console.log(`[Self-Healing] Fixed Tier Mismatch for ${user.username}: Starter -> ${activePlan.planName}`);
                 user.account_tier = activePlan.planName;
-                await user.save(); // Persist the fix
+                await user.save(); // Now this works because 'user' is a Sequelize instance
                 canWork = true;
             } else {
                 canWork = false;
@@ -93,20 +97,14 @@ exports.getTasks = async (req, res) => {
         // Get Tier Info
         let tier = await AccountTier.findOne({ where: { name: user.account_tier } });
 
-        // Fallback for "Starter" or defined limits
+        // Fallback for "Starter"
         if (!tier) {
-            // If strictly Starter = 0 limits? Or 5 free? 
-            // Agent Directive says "Package Level Lock", so Starter = 0 or Locked.
-            // But we already handled "canWork" above.
-            // Let's assume if canWork is true, there's a limit.
             dailyLimit = 5;
         } else {
             dailyLimit = tier.daily_limit;
         }
 
         // Limit Strictness: "User sees ONLY what they bought"
-        // If limit is 20, we fetch 20.
-
         if (!canWork) {
             return res.json({
                 canWork: false,
@@ -125,42 +123,22 @@ exports.getTasks = async (req, res) => {
         });
 
         // 2. Fetch New Smart Reviews
-        // Calculate Week
-        const joinDate = new Date(user.createdAt);
-        const now = new Date();
-        const diffTime = Math.abs(now - joinDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        const currentWeek = Math.ceil(diffDays / 7) || 1;
-
-        // Calculate remaining slots if we want mixed? Or just separate limits?
-        // Usually "Daily Limit" is total tasks.
-        // Let's apply limit to both for safety or split?
-        // Directive: "1000 TK = 20 Tasks".
-        // Let's assuming "Review Tasks" are the main work.
-
         const reviewTasks = await TaskProduct.findAll({
-            where: {
-                status: 'active',
-                // weekNumber: currentWeek // DISABLED: Strict rotation disabled based on Agent Analysis to ensure tasks show up.
-            },
+            where: { status: 'active' },
             limit: dailyLimit, // STRICT LIMIT
             order: [['createdAt', 'DESC']]
         });
 
-        // Optional: Filter in memory if we want to fallback to Week 1 if Week X is empty
-        // For now, I'm keeping it commented to avoid breaking existing flow until Admin sets weeks.
-        // But the logic is here.
-        // To enable: Uncomment the where clause above.
-
         res.json({
-            canWork: true, // Explicitly send true
-            dailyLimit: dailyLimit, // Send limit for frontend UI
+            canWork: true,
+            dailyLimit: dailyLimit,
             adTasks: adTasks,
             reviewTasks: reviewTasks
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Server Error' });
+        // RETURN ERROR DETAILS TO FRONTEND FOR DEBUGGING
+        res.status(500).json({ message: 'Server Error', error: err.message, stack: err.stack });
     }
 };
 

@@ -22,7 +22,8 @@ const adminCheck = async (req, res, next) => {
 
         const allowedRoles = ['admin', 'super_admin', 'employee_admin'];
         if (!allowedRoles.includes(user.role)) {
-            return res.status(403).json({ message: 'Access denied. Admins only.' });
+            console.warn(`[AdminCheck] Failed for User ${user.username} (${user.id}). Role: '${user.role}'`);
+            return res.status(403).json({ message: 'Access denied. Admins only.', debug_role: user.role });
         }
 
         // Refresh role in request object for downstream controllers

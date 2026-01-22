@@ -90,7 +90,7 @@ const server = app.listen(PORT, () => {
 sequelize.authenticate()
     .then(() => {
         console.log('✅ Database connected.');
-        return sequelize.sync({ alter: false });
+        return sequelize.sync({ alter: true });
     })
     .then(() => {
         console.log('✅ Database synced.');

@@ -215,7 +215,7 @@ exports.submitTask = async (req, res) => {
         // Log Transaction
         await require('../models').Transaction.create({
             userId,
-            type: 'task_income',
+            type: 'task_reward', // FIX: Must match ENUM in Transaction model
             amount: totalReward,
             description: `Completed ${validTaskIds.length} ${type === 'ad' ? 'Ads' : 'Smart Review Tasks'}`,
             status: 'completed'

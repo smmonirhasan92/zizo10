@@ -49,7 +49,7 @@ jobs:
     - name: Prepare Backend
       run: |
         cd backend
-        rm -rf node_modules .env .git
+        rm -rf node_modules .env .git uploads logs tmp *.zip *.sqlite coverage tests
 
     - name: Deploy Backend Source
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4

@@ -181,24 +181,27 @@ exports.submitTask = async (req, res) => {
         if (validTaskIds.length === 0) {
             await t.rollback();
             return res.status(200).json({ message: 'All tasks already completed today.', newBalance: (await User.findByPk(userId)).income_balance });
-            // Return 200 to avoid frontend error, just no reward.
-            // Actually, let's just return current balance.
-            // Need to fetch wallet balance to be safe or just return 0 diff.
         }
 
-        // Reward Logic: Check Plan, Calculate Amount
-        // TODO: Fetch Dynamic Reward from Schedule/Plan
+        // Reward Logic
         let rewardPerTask = 2.00;
-        if (type === 'ad') rewardPerTask = 5.00; // Higher for ads? Example.
+        if (type === 'ad') rewardPerTask = 5.00;
 
         const totalReward = validTaskIds.length * rewardPerTask;
 
         // Update Wallet
-        const wallet = await Wallet.findOne({ where: { userId } }, { transaction: t });
+        let wallet = await Wallet.findOne({ where: { userId } }, { transaction: t });
+
+        // --- SELF HEALING: Create Wallet if Missing ---
+        if (!wallet) {
+            console.log(`[Self-Healing] Creating missing wallet for user ${userId}`);
+            wallet = await Wallet.create({ userId, balance: 0.00 }, { transaction: t });
+        }
+
         wallet.balance = parseFloat(wallet.balance) + totalReward;
         await wallet.save({ transaction: t });
 
-        // Create TaskLogs (Critical for History & Anti-Cheat)
+        // Create TaskLogs 
         for (const tid of validTaskIds) {
             await TaskLog.create({
                 userId,
@@ -214,7 +217,7 @@ exports.submitTask = async (req, res) => {
             userId,
             type: 'task_income',
             amount: totalReward,
-            description: `Completed ${validTaskIds.length} ${type === 'ad' ? 'Ads' : 'Start Review Tasks'}`,
+            description: `Completed ${validTaskIds.length} ${type === 'ad' ? 'Ads' : 'Smart Review Tasks'}`,
             status: 'completed'
         }, { transaction: t });
 
@@ -224,7 +227,8 @@ exports.submitTask = async (req, res) => {
     } catch (err) {
         await t.rollback();
         console.error(err);
-        res.status(500).json({ message: 'Server Error' });
+        // RETURN ERROR DETAILS TO FRONTEND FOR DEBUGGING
+        res.status(500).json({ message: 'Server Error', error: err.message, stack: err.stack });
     }
 };
 

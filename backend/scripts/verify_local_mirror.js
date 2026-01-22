@@ -7,7 +7,7 @@ async function verifyMirror() {
 
     try {
         await sequelize.authenticate();
-        console.log('✅ [LOCAL] Database connected successfully (MySQL Local).');
+        console.log('✅ [LOCAL] Database connected successfully (SQLite Local).');
 
         // Sync Schema (Add missing columns like accountStatus)
         console.log('🔄 Syncing Schema (Alter)...');

@@ -1,4 +1,4 @@
-const { TaskAd, TaskLog, TaskProduct, User, Wallet, UserPlan, sequelize } = require('../models');
+const { TaskAd, TaskLog, TaskProduct, User, Wallet, UserPlan, AccountTier, sequelize } = require('../models');
 
 // Admin: Create New Task (Smart Review)
 exports.createTask = async (req, res) => {
@@ -58,7 +58,6 @@ exports.getAllTasks = async (req, res) => {
 exports.getTasks = async (req, res) => {
     try {
         const user = req.user.user;
-        const { TaskProduct, TaskAd } = require('../models');
 
         // --- SMART PLAN CONTROL START ---
         // 1. Check if Plan is Valid

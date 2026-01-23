@@ -115,19 +115,39 @@ exports.getTasks = async (req, res) => {
         }
         // --- SMART PLAN CONTROL END ---
 
-        // 1. Fetch Old System Ads
-        const adTasks = await TaskAd.findAll({
+        // --- SMART PLAN CONTROL END ---
+
+        // 0. Fetch Completed Tasks Today (Context for filtering)
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const completedLogs = await TaskLog.findAll({
+            where: {
+                userId: user.id,
+                createdAt: { [require('sequelize').Op.gte]: startOfDay }
+            },
+            attributes: ['taskId']
+        });
+        const completedSet = new Set(completedLogs.map(log => String(log.taskId)));
+
+        // 1. Fetch Old System Ads (Filtered)
+        let adTasks = await TaskAd.findAll({
             where: { status: 'active' },
             order: [['priority', 'ASC']],
-            limit: dailyLimit // STRICT LIMIT
+            // limit: dailyLimit // Don't limit at DB query level yet, we need to filter first
         });
 
+        // Filter out completed and Apply Limit
+        adTasks = adTasks.filter(ad => !completedSet.has(String(ad.id))).slice(0, dailyLimit);
+
         // 2. Fetch New Smart Reviews
-        const reviewTasks = await TaskProduct.findAll({
+        let reviewTasks = await TaskProduct.findAll({
             where: { status: 'active' },
-            limit: dailyLimit, // STRICT LIMIT
             order: [['createdAt', 'DESC']]
         });
+
+        // Filter out completed and Apply Limit
+        reviewTasks = reviewTasks.filter(t => !completedSet.has(String(t.id))).slice(0, dailyLimit);
 
         res.json({
             canWork: true,
@@ -175,8 +195,9 @@ exports.submitTask = async (req, res) => {
             transaction: t
         });
 
-        const completedTaskIds = new Set(completedToday.map(log => log.taskId));
-        const validTaskIds = taskIds.filter(id => !completedTaskIds.has(id));
+        const completedTaskIds = new Set(completedToday.map(log => String(log.taskId)));
+        // FIX: Cast input ID to String to match Database format
+        const validTaskIds = taskIds.filter(id => !completedTaskIds.has(String(id)));
 
         if (validTaskIds.length === 0) {
             await t.rollback();

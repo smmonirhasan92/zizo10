@@ -205,11 +205,25 @@ exports.submitTask = async (req, res) => {
             return res.status(200).json({ message: 'All tasks already completed today.', newBalance: currentUser.income_balance });
         }
 
-        // Reward Logic
-        let rewardPerTask = 2.00;
-        if (type === 'ad') rewardPerTask = 5.00;
+        // --- DYNAMIC REWARD LOGIC START ---
+        // 1. Fetch User to get current Tier
+        const user = await User.findByPk(userId, { transaction: t });
+
+        // 2. Fetch Tier Details to get 'task_reward'
+        const tier = await AccountTier.findOne({
+            where: { name: user.account_tier },
+            transaction: t
+        });
+
+        let rewardPerTask = 2.00; // Default Safe Fallback
+        if (tier && tier.task_reward) {
+            rewardPerTask = parseFloat(tier.task_reward);
+        } else {
+            console.warn(`[Reward Warning] User ${userId} has unknown tier '${user.account_tier}'. Using default 2.00`);
+        }
 
         const totalReward = validTaskIds.length * rewardPerTask;
+        // --- DYNAMIC REWARD LOGIC END ---
 
         // 2. DIRECT BALANCE INJECTION (Bullet-Proof Directive #1)
         // Instead of using Wallet model, we target User.income_balance directly

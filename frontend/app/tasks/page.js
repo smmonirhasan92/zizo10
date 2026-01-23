@@ -135,6 +135,7 @@ export default function TaskCenterPage() {
             await api.post('/task/submit', { taskIds: selectedTasks, type: 'review' });
             setMessage(`🎉 Reviews Submitted Successfully!`);
             setSelectedTasks([]);
+            fetchTasks(); // Refresh List Immediately
         } catch (err) {
             setMessage('❌ Error: ' + (err.response?.data?.message || err.message));
         } finally {

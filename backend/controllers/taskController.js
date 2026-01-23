@@ -138,7 +138,12 @@ exports.getTasks = async (req, res) => {
         });
 
         // Filter out completed and Apply Limit
+        console.log(`[DEBUG] AdTasks before filter: ${adTasks.length}`);
+        console.log(`[DEBUG] Completed Set IDs:`, Array.from(completedSet));
+
         adTasks = adTasks.filter(ad => !completedSet.has(String(ad.id))).slice(0, dailyLimit);
+
+        console.log(`[DEBUG] AdTasks after filter: ${adTasks.length}`);
 
         // 2. Fetch New Smart Reviews
         let reviewTasks = await TaskProduct.findAll({

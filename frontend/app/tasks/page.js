@@ -92,8 +92,9 @@ export default function TaskCenterPage() {
             setShowCoin(true);
             showSuccess(`Reward Claimed: ${res.data.rewardEarned || 'Success'} BDT`);
 
-            // Refresh tasks immediately to remove completed one or update list
-            fetchTasks();
+            // Hard Refresh to ensure strict sync (Bullet-Proof Directive)
+            window.location.reload();
+
             // Ideally we should just filter it out locally to feel faster, but fetch ensures sync.
             // Let's filter locally for instant feel? 
             // Actually, keep it simple.
@@ -135,7 +136,8 @@ export default function TaskCenterPage() {
             await api.post('/task/submit', { taskIds: selectedTasks, type: 'review' });
             setMessage(`🎉 Reviews Submitted Successfully!`);
             setSelectedTasks([]);
-            fetchTasks(); // Refresh List Immediately
+            // Hard Refresh to ensure strict sync (Bullet-Proof Directive)
+            window.location.reload();
         } catch (err) {
             setMessage('❌ Error: ' + (err.response?.data?.message || err.message));
         } finally {

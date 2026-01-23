@@ -134,7 +134,6 @@ exports.getTasks = async (req, res) => {
         let adTasks = await TaskAd.findAll({
             where: { status: 'active' },
             order: [['priority', 'ASC']],
-            // limit: dailyLimit // Don't limit at DB query level yet, we need to filter first
         });
 
         // Filter out completed and Apply Limit
@@ -162,8 +161,7 @@ exports.getTasks = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        // RETURN ERROR DETAILS TO FRONTEND FOR DEBUGGING
-        res.status(500).json({ message: 'Server Error', error: err.message, stack: err.stack });
+        res.status(500).json({ message: 'Server Error', error: err.message });
     }
 };
 
@@ -184,7 +182,7 @@ exports.submitTask = async (req, res) => {
 
         const { Op } = require('sequelize');
 
-        // 1. Filter out duplicates (Anti-Cheat) - OPTIMIZED BATCH QUERY
+        // 1. Antigravity Filter Logic (Strict & Robust)
         const startOfDay = new Date();
         startOfDay.setHours(0, 0, 0, 0);
 
@@ -199,53 +197,61 @@ exports.submitTask = async (req, res) => {
             transaction: t
         });
 
-        // FIX: Strict String comparison for IDs to prevent "10" !== 10 issues
+        // STRICT CHECK: Ensure IDs are compared as Strings
         const completedTaskIds = new Set(completedToday.map(log => String(log.taskId)));
         const validTaskIds = taskIds.filter(id => !completedTaskIds.has(String(id)));
 
         if (validTaskIds.length === 0) {
             await t.rollback();
-            // Refetch fresh balance to show to user
             const currentUser = await User.findByPk(userId);
             return res.status(200).json({ message: 'All tasks already completed today.', newBalance: currentUser.income_balance });
         }
 
-        // --- DYNAMIC REWARD LOGIC START ---
+        // --- STRICT DYNAMIC REWARD LOGIC ---
         // 1. Fetch User to get current Tier
         const user = await User.findByPk(userId, { transaction: t });
 
-        // 2. Fetch Tier Details to get 'task_reward'
-        const tier = await AccountTier.findOne({
-            where: { name: user.account_tier },
-            transaction: t
-        });
+        // 2. Fetch Tier Details (Case Insensitive Match)
+        // We fetch all tiers and find the matching one to be safe against DB collation issues
+        const allTiers = await AccountTier.findAll({ transaction: t });
+        const userTierName = (user.account_tier || '').trim().toLowerCase();
 
-        let rewardPerTask = 2.00; // Default Safe Fallback
-        if (tier && tier.task_reward) {
-            rewardPerTask = parseFloat(tier.task_reward);
-        } else {
-            console.warn(`[Reward Warning] User ${userId} has unknown tier '${user.account_tier}'. Using default 2.00`);
+        const tier = allTiers.find(t => t.name.trim().toLowerCase() === userTierName);
+
+        if (!tier) {
+            await t.rollback();
+            console.error(`[CRITICAL] User ${userId} has unknown tier '${user.account_tier}'. Transaction Aborted.`);
+            return res.status(400).json({
+                message: `Plan Configuration Error: Tier '${user.account_tier}' not found. Please contact support.`
+            });
+        }
+
+        const rewardPerTask = parseFloat(tier.task_reward);
+
+        // Safety Check: Ensure reward is not unexpectedly high or negative
+        if (isNaN(rewardPerTask) || rewardPerTask < 0) {
+            await t.rollback();
+            return res.status(500).json({ message: 'Invalid reward configuration detected.' });
         }
 
         const totalReward = validTaskIds.length * rewardPerTask;
-        // --- DYNAMIC REWARD LOGIC END ---
+        // --- END STRICT LOGIC ---
 
-        // 2. DIRECT BALANCE INJECTION (Bullet-Proof Directive #1)
-        // Instead of using Wallet model, we target User.income_balance directly
+        // 3. DIRECT BALANCE INJECTION
         await User.increment('income_balance', {
             by: totalReward,
             where: { id: userId },
             transaction: t
         });
 
-        // 3. TASK LOGGING (Bullet-Proof Directive #2)
+        // 4. TASK LOGGING
         const logEntries = validTaskIds.map(tid => ({
             userId,
             taskId: String(tid), // Ensure ID is stored as String
             status: 'completed',
             reward: rewardPerTask,
             type: type || 'daily_task',
-            date: new Date() // Explicit date for easier sorting
+            date: new Date()
         }));
 
         await TaskLog.bulkCreate(logEntries, { transaction: t });

@@ -169,14 +169,13 @@ exports.getTaskStatus = exports.getTasks;
 exports.submitTask = async (req, res) => {
     const t = await sequelize.transaction();
     try {
-        const userId = req.user.user.id;
+        const userId = req.user.user.id; // Correct User ID from Token
         const { taskIds, type } = req.body; // type: 'review' or 'ad' (if batch)
 
         if (!taskIds || !Array.isArray(taskIds) || taskIds.length === 0) {
+            await t.rollback();
             return res.status(400).json({ message: 'No tasks submitted' });
         }
-
-        const user = await User.findByPk(userId, { transaction: t });
 
         const { Op } = require('sequelize');
 
@@ -195,13 +194,15 @@ exports.submitTask = async (req, res) => {
             transaction: t
         });
 
+        // FIX: Strict String comparison for IDs to prevent "10" !== 10 issues
         const completedTaskIds = new Set(completedToday.map(log => String(log.taskId)));
-        // FIX: Cast input ID to String to match Database format
         const validTaskIds = taskIds.filter(id => !completedTaskIds.has(String(id)));
 
         if (validTaskIds.length === 0) {
             await t.rollback();
-            return res.status(200).json({ message: 'All tasks already completed today.', newBalance: (await User.findByPk(userId)).income_balance });
+            // Refetch fresh balance to show to user
+            const currentUser = await User.findByPk(userId);
+            return res.status(200).json({ message: 'All tasks already completed today.', newBalance: currentUser.income_balance });
         }
 
         // Reward Logic
@@ -210,46 +211,51 @@ exports.submitTask = async (req, res) => {
 
         const totalReward = validTaskIds.length * rewardPerTask;
 
-        // Update Wallet
-        let wallet = await Wallet.findOne({ where: { userId } }, { transaction: t });
+        // 2. DIRECT BALANCE INJECTION (Bullet-Proof Directive #1)
+        // Instead of using Wallet model, we target User.income_balance directly
+        await User.increment('income_balance', {
+            by: totalReward,
+            where: { id: userId },
+            transaction: t
+        });
 
-        // --- SELF HEALING: Create Wallet if Missing ---
-        if (!wallet) {
-            console.log(`[Self-Healing] Creating missing wallet for user ${userId}`);
-            wallet = await Wallet.create({ userId, balance: 0.00 }, { transaction: t });
-        }
+        // 3. TASK LOGGING (Bullet-Proof Directive #2)
+        const logEntries = validTaskIds.map(tid => ({
+            userId,
+            taskId: String(tid), // Ensure ID is stored as String
+            status: 'completed',
+            reward: rewardPerTask,
+            type: type || 'daily_task',
+            date: new Date() // Explicit date for easier sorting
+        }));
 
-        wallet.balance = parseFloat(wallet.balance) + totalReward;
-        await wallet.save({ transaction: t });
+        await TaskLog.bulkCreate(logEntries, { transaction: t });
 
-        // Create TaskLogs 
-        for (const tid of validTaskIds) {
-            await TaskLog.create({
-                userId,
-                taskId: tid,
-                status: 'completed',
-                reward: rewardPerTask,
-                type: type || 'daily_task'
-            }, { transaction: t });
-        }
-
-        // Log Transaction
+        // 4. TRANSACTION HISTORY (Bullet-Proof Directive #3)
         await require('../models').Transaction.create({
             userId,
-            type: 'task_reward', // FIX: Must match ENUM in Transaction model
+            type: 'task_reward', // Verified ENUM value
             amount: totalReward,
             description: `Completed ${validTaskIds.length} ${type === 'ad' ? 'Ads' : 'Smart Review Tasks'}`,
             status: 'completed'
         }, { transaction: t });
 
         await t.commit();
-        res.json({ message: 'Tasks Verified & Reward Added!', newBalance: wallet.balance });
+
+        // Refetch updated user to return exact new balance
+        const updatedUser = await User.findByPk(userId);
+
+        res.json({
+            message: 'Tasks Verified & Reward Added!',
+            newBalance: updatedUser.income_balance,
+            rewardEarned: totalReward
+        });
 
     } catch (err) {
         await t.rollback();
-        console.error(err);
-        // RETURN ERROR DETAILS TO FRONTEND FOR DEBUGGING
-        res.status(500).json({ message: 'Server Error', error: err.message, stack: err.stack });
+        console.error("Submit Task Error:", err);
+        res.status(500).json({ message: 'Server Error', error: err.message });
     }
 };
+
 
